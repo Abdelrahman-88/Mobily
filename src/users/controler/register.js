@@ -15,7 +15,6 @@ const register = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Email already exist" });
         } else {
             if (password == cPassword) {
-
                 const verificationKey = nanoid()
                 const newUser = new User({ name, email, password, verificationKey });
                 const user = await newUser.save();
@@ -78,7 +77,7 @@ const resendVerificationKey = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid user" });
         }
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to verify" });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to resend" });
     }
 }
 
