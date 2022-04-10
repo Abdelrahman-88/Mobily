@@ -18,10 +18,10 @@ const register = async(req, res) => {
 
                 const verificationKey = nanoid()
                 const newUser = new User({ name, email, password, verificationKey });
-                const data = await newUser.save();
+                const user = await newUser.save();
                 const info = await sendEmail([email], verificationTemplate(verificationKey), subject)
                 if (info.messageId) {
-                    const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = data._doc
+                    const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = user._doc
                     res.status(StatusCodes.CREATED).json({ message: "Registered successfully", data: rest });
                 } else {
                     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
@@ -32,7 +32,7 @@ const register = async(req, res) => {
             }
         }
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to register", info });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to register" });
     }
 }
 
