@@ -31,7 +31,7 @@ const register = async(req, res) => {
             }
         }
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to register" });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to register", error });
     }
 }
 
