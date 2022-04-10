@@ -1,0 +1,9 @@
+const {
+    UPDATE_PROFILE,
+    UPDATE_PASSWORD,
+    RESET_PASSWORD,
+    CHANGE_PASSWORD,
+    LOG_OUT
+} = require("../../../src/users/endPoint");
+
+module.exports = [UPDATE_PROFILE, UPDATE_PASSWORD, RESET_PASSWORD, CHANGE_PASSWORD, LOG_OUT]
