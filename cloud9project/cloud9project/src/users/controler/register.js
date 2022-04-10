@@ -15,7 +15,6 @@ const register = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Email already exist" });
         } else {
             if (password == cPassword) {
-
                 const verificationKey = nanoid()
                 const newUser = new User({ name, email, password, verificationKey });
                 const data = await newUser.save();
@@ -32,7 +31,7 @@ const register = async(req, res) => {
             }
         }
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to register", info });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to register" });
     }
 }
 
