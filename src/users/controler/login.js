@@ -22,7 +22,7 @@ const logIn = async(req, res) => {
                     }
                 });
             } else {
-                res.status(StatusCodes.BAD_REQUEST).json({ message: "Unverified email" });
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "Unverified email", id: emailExist._id });
             }
         } else {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid email or password" });
