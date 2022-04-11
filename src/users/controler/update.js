@@ -30,7 +30,7 @@ const updateProfile = async(req, res) => {
                     if (info.messageId) {
                         const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = data._doc
                         const token = jwt.sign({...rest }, process.env.SECRET_KEY)
-                        res.status(StatusCodes.OK).json({ message: "Updated successfully", token });
+                        res.status(StatusCodes.OK).json({ message: "Updated successfully verify email", token });
                     } else {
                         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
                     }
