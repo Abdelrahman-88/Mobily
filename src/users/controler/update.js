@@ -28,8 +28,7 @@ const updateProfile = async(req, res) => {
                     const data = await User.findByIdAndUpdate({ _id: id }, { name, email, verified: false, logedIn: false, verificationKey }, { new: true });
                     const info = await sendEmail([email], updateTemplate(verificationKey), subject)
                     if (info.messageId) {
-                        const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = data._doc
-                        const token = jwt.sign({...rest }, process.env.SECRET_KEY)
+                        const token = jwt.sign({ id: data._id }, process.env.SECRET_KEY)
                         res.status(StatusCodes.OK).json({ message: "Updated successfully verify email", token });
                     } else {
                         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
