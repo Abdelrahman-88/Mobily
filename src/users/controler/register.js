@@ -3,6 +3,7 @@ const { nanoid } = require('nanoid');
 const sendEmail = require("../../../common/service/sendEmail");
 const { verificationTemplate } = require("../../../common/service/template");
 const User = require("../model/user.model");
+const jwt = require('jsonwebtoken');
 
 
 const register = async(req, res) => {
@@ -20,8 +21,8 @@ const register = async(req, res) => {
                 const user = await newUser.save();
                 const info = await sendEmail([email], verificationTemplate(verificationKey), subject)
                 if (info.messageId) {
-                    const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = user._doc
-                    res.status(StatusCodes.CREATED).json({ message: "Registered successfully", data: rest });
+                    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY)
+                    res.status(StatusCodes.CREATED).json({ message: "Registered successfully", token });
                 } else {
                     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
                 }

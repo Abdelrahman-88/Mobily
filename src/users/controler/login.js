@@ -22,7 +22,8 @@ const logIn = async(req, res) => {
                     }
                 });
             } else {
-                res.status(StatusCodes.BAD_REQUEST).json({ message: "Unverified email", id: emailExist._id });
+                const token = jwt.sign({ id: emailExist._id }, process.env.SECRET_KEY)
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "Unverified email", token });
             }
         } else {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid email or password" });
