@@ -84,7 +84,7 @@ const sendResetKey = async(req, res) => {
         const { email } = req.body
         const data = await User.findOne({ email, verified: true, deactivated: false, blocked: false })
         if (data) {
-            const token = jwt.sign({ _id: data._id }, process.env.SECRET_KEY, {
+            const token = jwt.sign({ id: data._id }, process.env.SECRET_KEY, {
                 expiresIn: process.env.TOKEN_RESET_EXPIRATION,
             });
             const verificationKey = nanoid()
@@ -109,7 +109,7 @@ const resetPassword = async(req, res) => {
         const { verificationKey } = req.body
         if (verificationKey == req.user.verificationKey) {
             const reset = await User.findByIdAndUpdate({ _id: req.user._id }, { forgetPassword: true })
-            res.status(StatusCodes.OK).json({ message: "Reset successfully " });
+            res.status(StatusCodes.OK).json({ message: "Reset successfully" });
 
         } else {
             res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
