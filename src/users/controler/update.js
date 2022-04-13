@@ -84,7 +84,7 @@ const sendResetKey = async(req, res) => {
         const { email } = req.body
         const data = await User.findOne({ email, verified: true, deactivated: false, blocked: false })
         if (data) {
-            const token = jwt.sign({ id: data._id }, process.env.SECRET_KEY, {
+            const token = jwt.sign({ _id: data._id }, process.env.SECRET_KEY, {
                 expiresIn: process.env.TOKEN_RESET_EXPIRATION,
             });
             const verificationKey = nanoid()
