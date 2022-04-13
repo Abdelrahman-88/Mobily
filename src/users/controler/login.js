@@ -22,7 +22,7 @@ const logIn = async(req, res) => {
                     }
                 });
             } else {
-                const token = jwt.sign({ id: emailExist._id }, process.env.SECRET_KEY)
+                const token = jwt.sign({ _id: emailExist._id }, process.env.SECRET_KEY)
                 res.status(StatusCodes.BAD_REQUEST).json({ message: "Unverified email", token });
             }
         } else {

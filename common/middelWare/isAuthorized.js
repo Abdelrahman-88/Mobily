@@ -4,6 +4,7 @@ const rbac = require('../rbac/rbac');
 const User = require('../../src/users/model/user.model');
 
 module.exports = (endPoint) => {
+    console.log('err');
     return async(req, res, next) => {
         try {
             if (req.headers.authorization) {

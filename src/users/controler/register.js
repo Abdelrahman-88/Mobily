@@ -21,7 +21,7 @@ const register = async(req, res) => {
                 const user = await newUser.save();
                 const info = await sendEmail([email], verificationTemplate(verificationKey), subject)
                 if (info.messageId) {
-                    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY)
+                    const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY)
                     res.status(StatusCodes.CREATED).json({ message: "Registered successfully", token });
                 } else {
                     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
