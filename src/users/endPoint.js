@@ -1,7 +1,7 @@
 const UPDATE_PROFILE = "user:UPDATE_PROFILE"
 const UPDATE_PASSWORD = "user:UPDATE_PASSWORD"
 const RESET_PASSWORD = "user:RESET_PASSWORD"
-const CHANGE_PASSWORD = "user:RESET_PASSWORD"
+const CHANGE_PASSWORD = "user:CHANGE_PASSWORD"
 const LOG_OUT = "user:LOG_OUT"
 
 module.exports = {
