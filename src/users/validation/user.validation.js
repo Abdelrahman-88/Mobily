@@ -6,6 +6,8 @@ module.exports = {
     registerSchema: {
         body: Joi.object().required().keys({
             name: Joi.string().required(),
+            companyName: Joi.string().required(),
+            position: Joi.string().required(),
             email: Joi.string().required().email(),
             password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)).required(),
             cPassword: Joi.ref('password')
@@ -33,7 +35,9 @@ module.exports = {
     updateProfileSchema: {
         body: Joi.object().required().keys({
             email: Joi.string().required().email(),
-            name: Joi.string().required()
+            name: Joi.string().required(),
+            companyName: Joi.string().required(),
+            position: Joi.string().required()
         }),
         params: Joi.object().required().keys({
             id: Joi.string().required().min(24).max(24)

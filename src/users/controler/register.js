@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 
 const register = async(req, res) => {
     try {
-        let { name, email, password, cPassword } = req.body
+        let { name, email, companyName, position, password, cPassword } = req.body
         email = email.toLowerCase()
         const subject = `Email confirmation`
         const emailExist = await User.findOne({ email, deactivated: false });
@@ -17,7 +17,7 @@ const register = async(req, res) => {
         } else {
             if (password == cPassword) {
                 const verificationKey = nanoid()
-                const newUser = new User({ name, email, password, verificationKey });
+                const newUser = new User({ name, email, companyName, position, password, verificationKey });
                 const user = await newUser.save();
                 const info = await sendEmail([email], verificationTemplate(verificationKey), subject)
                 if (info.messageId) {
