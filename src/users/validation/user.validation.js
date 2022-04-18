@@ -9,7 +9,7 @@ module.exports = {
             companyName: Joi.string().required(),
             position: Joi.string().required(),
             email: Joi.string().required().email(),
-            password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@_$&])[0-9a-zA-Z@_$&]{8,}$/)).required(),
+            password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required(),
             cPassword: Joi.ref('password')
         })
     },
@@ -29,7 +29,7 @@ module.exports = {
     logInSchema: {
         body: Joi.object().required().keys({
             email: Joi.string().required().email(),
-            password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@_$&])[0-9a-zA-Z@_$&]{8,}$/)).required()
+            password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required()
         })
     },
     updateProfileSchema: {
@@ -45,8 +45,8 @@ module.exports = {
     },
     updatePasswordSchema: {
         body: Joi.object().required().keys({
-            oldPassword: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@_$&])[0-9a-zA-Z@_$&]{8,}$/)).required(),
-            newPassword: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@_$&])[0-9a-zA-Z@_$&]{8,}$/)).required(),
+            oldPassword: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required(),
+            newPassword: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required(),
             cNewPassword: Joi.ref('newPassword')
         }),
         params: Joi.object().required().keys({
@@ -65,7 +65,7 @@ module.exports = {
     },
     changePasswordSchema: {
         body: Joi.object().required().keys({
-            newPassword: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@_$&])[0-9a-zA-Z@_$&]{8,}$/)).required(),
+            newPassword: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required(),
             cNewPassword: Joi.ref('newPassword')
         }),
         params: Joi.object().required().keys({
