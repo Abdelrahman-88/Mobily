@@ -30,7 +30,7 @@ module.exports = (endPoint) => {
                 res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })
             }
         } catch (error) {
-            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "UNAUTHORIZED or Invalid key" })
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "UNAUTHORIZED" })
         }
     }
 }
