@@ -8,6 +8,9 @@ const userSchema = new Schema({
     position: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
+    documentId: { type: Schema.Types.ObjectId, ref: "document" },
+    documentExpiryDate: Date,
+    documentValidity: { type: Boolean, default: false },
     role: {
         type: String,
         enum: ["user", "admin"],

@@ -76,5 +76,11 @@ module.exports = {
         params: Joi.object().required().keys({
             id: Joi.string().required().min(24).max(24)
         })
+    },
+    userExpireDocmentSchema: {
+        body: Joi.object().required().keys({
+            from: Joi.date().required(),
+            to: Joi.date().required()
+        })
     }
 }

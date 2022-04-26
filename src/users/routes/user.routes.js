@@ -1,8 +1,18 @@
 const router = require("express").Router();
 const validation = require("../../../common/middelWare/validation");
 const { logIn, logOut } = require("../controler/login");
-const { register, verifyEmail, resendVerificationKey } = require("../controler/register");
-const { updateProfile, updatePassword, sendResetKey, resetPassword, changePassword } = require("../controler/update");
+const {
+    register,
+    verifyEmail,
+    resendVerificationKey
+} = require("../controler/register");
+const {
+    updateProfile,
+    updatePassword,
+    sendResetKey,
+    resetPassword,
+    changePassword
+} = require("../controler/update");
 const {
     registerSchema,
     verifyEmailSchema,
@@ -13,7 +23,8 @@ const {
     resetKeySchema,
     resetPasswordSchema,
     changePasswordSchema,
-    logOutSchema
+    logOutSchema,
+    userExpireDocmentSchema
 } = require("../validation/user.validation");
 const isAuthorized = require("../../../common/middelWare/isAuthorized");
 const {
@@ -21,8 +32,10 @@ const {
     UPDATE_PASSWORD,
     RESET_PASSWORD,
     CHANGE_PASSWORD,
-    LOG_OUT
+    LOG_OUT,
+    USER_EXPIRE_DOCMENT
 } = require("../endPoint");
+const { userExpireDocment } = require("../controler/expire");
 
 
 router.post("/register", validation(registerSchema), register);
@@ -44,6 +57,8 @@ router.patch("/resetPassword", validation(resetPasswordSchema), isAuthorized(RES
 router.patch("/changePassword/:id", validation(changePasswordSchema), isAuthorized(CHANGE_PASSWORD), changePassword);
 
 router.patch("/logOut/:id", validation(logOutSchema), isAuthorized(LOG_OUT), logOut);
+
+router.patch("/userExpireDocment", validation(userExpireDocmentSchema), isAuthorized(USER_EXPIRE_DOCMENT), userExpireDocment);
 
 
 
