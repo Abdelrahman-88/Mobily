@@ -20,9 +20,10 @@ module.exports = {
         query: Joi.object().required().keys({
             page: Joi.string().allow(''),
             size: Joi.string().allow(''),
-            valid: Joi.string().allow(''),
-            status: Joi.string().allow(''),
-            createdAt: Joi.date().allow('')
+            valid: Joi.string().valid('valid', 'invalid').allow(''),
+            status: Joi.string().valid('open', 'closed', 'pending').allow(''),
+            from: Joi.date().allow(''),
+            to: Joi.date().allow('')
         })
     },
     validateDocumentSchema: {

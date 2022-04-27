@@ -110,10 +110,18 @@ const displayDocument = async(req, res) => {
 
 const getAllDocuments = async(req, res) => {
     try {
-        let { page, size, ...rest } = req.query
+        let { page, size, from, to, ...rest } = req.query
+        if (!from) {
+            from = new Date('2022')
+        }
+        if (!to) {
+            to = new Date()
+        }
+        from = new Date(from).toISOString()
+        to = new Date(to).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)
-        const data = await Document.find({...rest }).populate('createdBy', '-password -verificationKey').skip(skip).limit(parseInt(limit))
-        const total = await Document.find({...rest }).count()
+        const data = await Document.find({...rest, createdAt: { $gte: from, $lte: to } }).populate('createdBy', '-password -verificationKey').skip(skip).limit(parseInt(limit))
+        const total = await Document.find({...rest, createdAt: { $gte: from, $lte: to } }).count()
         totalPages = Math.ceil(total / limit)
         res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages, total, data })
     } catch (error) {
