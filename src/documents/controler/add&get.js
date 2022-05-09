@@ -110,6 +110,7 @@ const displayDocument = async(req, res) => {
 
 const getAllDocuments = async(req, res) => {
     try {
+
         let { page, size, from, to, ...rest } = req.query
         if (!from) {
             from = new Date('2022')
@@ -117,6 +118,11 @@ const getAllDocuments = async(req, res) => {
         if (!to) {
             to = new Date()
         }
+        Object.keys(rest).forEach(key => {
+            if (rest[key] === '') {
+                delete rest[key];
+            }
+        });
         from = new Date(from).toISOString()
         to = new Date(to).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)

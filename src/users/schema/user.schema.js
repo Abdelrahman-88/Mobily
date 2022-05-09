@@ -1,6 +1,6 @@
 const { Schema } = require("mongoose")
 const bcrypt = require('bcrypt');
-
+const { default: mongoose } = require("mongoose");
 
 const userSchema = new Schema({
     name: { type: String, required: true },
@@ -11,6 +11,7 @@ const userSchema = new Schema({
     documentId: { type: Schema.Types.ObjectId, ref: "document" },
     documentExpiryDate: Date,
     documentValidity: { type: Boolean, default: false },
+    employeeId: { type: Number },
     role: {
         type: String,
         enum: ["user", "admin"],
@@ -23,6 +24,7 @@ const userSchema = new Schema({
     logedIn: { type: Boolean, default: false },
     forgetPassword: { type: Boolean, default: false }
 }, { timestamps: true })
+
 
 userSchema.pre("save", async function(next) {
     try {

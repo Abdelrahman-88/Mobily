@@ -25,7 +25,6 @@ module.exports = (endPoint) => {
                 } else {
                     res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })
                 }
-
             } else {
                 res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })
             }

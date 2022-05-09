@@ -13,7 +13,7 @@ const logIn = async(req, res) => {
                 bcrypt.compare(password, emailExist.password, async function(err, result) {
                     if (err) throw Error(err)
                     if (result) {
-                        const data = await User.findByIdAndUpdate({ _id: emailExist.id }, { logedIn: true }, { new: true });
+                        const data = await User.findByIdAndUpdate({ _id: emailExist._id }, { logedIn: true }, { new: true });
                         const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = emailExist._doc
                         const token = jwt.sign({...rest }, process.env.SECRET_KEY)
                         res.status(StatusCodes.OK).json({ message: "Login successfully", token });
