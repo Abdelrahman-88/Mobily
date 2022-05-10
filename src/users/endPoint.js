@@ -3,7 +3,6 @@ const UPDATE_PASSWORD = "user:UPDATE_PASSWORD"
 const RESET_PASSWORD = "user:RESET_PASSWORD"
 const CHANGE_PASSWORD = "user:CHANGE_PASSWORD"
 const LOG_OUT = "user:LOG_OUT"
-const ADD_ADMIN = "admin:ADD_ADMIN"
 const USER_EXPIRE_DOCMENT = "admin:USER_EXPIRE_DOCMENT"
 
 module.exports = {
@@ -12,6 +11,5 @@ module.exports = {
     RESET_PASSWORD,
     CHANGE_PASSWORD,
     LOG_OUT,
-    ADD_ADMIN,
     USER_EXPIRE_DOCMENT
 }

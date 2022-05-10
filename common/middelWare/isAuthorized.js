@@ -2,6 +2,7 @@ var jwt = require('jsonwebtoken');
 const { StatusCodes } = require("http-status-codes");
 const rbac = require('../rbac/rbac');
 const User = require('../../src/users/model/user.model');
+const Admin = require('../../src/admins/model/admin.model');
 
 module.exports = (endPoint) => {
     return async(req, res, next) => {
@@ -20,7 +21,18 @@ module.exports = (endPoint) => {
                             res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })
                         }
                     } else {
-                        res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })
+                        const user = await Admin.findOne({ _id: decoded._id })
+                        if (user) {
+                            const isAllowed = await rbac.can(user.role, endPoint)
+                            if (isAllowed) {
+                                req.user = user
+                                next()
+                            } else {
+                                res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })
+                            }
+                        } else {
+                            res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })
+                        }
                     }
                 } else {
                     res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" })

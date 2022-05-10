@@ -33,7 +33,16 @@ module.exports = {
         body: Joi.object().required().keys({
             expiryDate: Joi.date().required(),
             valid: Joi.string().valid('valid', 'invalid').required(),
-            status: Joi.string().valid('open', 'closed', 'pending').required()
+            status: Joi.string().valid('closed', 'pending').required()
+        })
+    },
+    activateServiceSchema: {
+        params: Joi.object().required().keys({
+            documentId: Joi.string().required().min(24).max(24)
+        }),
+        body: Joi.object().required().keys({
+            valid: Joi.string().valid('valid', 'invalid').required(),
+            status: Joi.string().valid('closed', 'pending').required()
         })
     }
 }
