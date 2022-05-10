@@ -47,7 +47,8 @@ function fileFilter(req, file, cb) {
     if (file.mimetype === "application/pdf") {
         cb(null, true)
     } else {
-        cb('invalid file', false)
+        req.fileValidationError = "Forbidden extension only PDF available";
+        return cb(null, false, req.fileValidationError);
     }
 }
 
