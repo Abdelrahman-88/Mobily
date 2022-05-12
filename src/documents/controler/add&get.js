@@ -4,6 +4,8 @@ const Document = require("../model/document.model");
 const { conn } = require("../../../common/connection/confg");
 const mongoose = require('mongoose');
 const pageService = require("../../../common/service/page");
+const searchServies = require("../../../common/service/search")
+
 let gfs
 conn.once("open", () => {
     // init stream
@@ -124,25 +126,23 @@ const displayDocument = async(req, res) => {
 const getAllDocuments = async(req, res) => {
     try {
 
-        let { page, size, from, to, ...rest } = req.query
+        let { page, size, from, to, status, valid } = req.query
         if (!from) {
             from = new Date('2022')
         }
         if (!to) {
             to = new Date()
         }
-        Object.keys(rest).forEach(key => {
-            if (rest[key] === '' || value[key] === undefined || value[key] === null) {
-                delete rest[key];
-            }
-        });
+
         from = new Date(from).toISOString()
         to = new Date(to).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)
-        const data = await Document.find({...rest, createdAt: { $gte: from, $lte: to } }).populate('createdBy', '-password -verificationKey').skip(skip).limit(parseInt(limit))
-        const total = await Document.find({...rest, createdAt: { $gte: from, $lte: to } }).count()
-        totalPages = Math.ceil(total / limit)
-        res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages, total, data })
+        const documents = await searchServies("", { status, valid }, limit, skip, Document, [], "createdBy", "-password -verificationKey")
+        if (documents.data.length) {
+            res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: documents.totalPages, total: documents.total, data: documents.data });
+        } else {
+            res.status(StatusCodes.BAD_REQUEST).json({ message: "No documents found" });
+        }
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to get documents" });
     }

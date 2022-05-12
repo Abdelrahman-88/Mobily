@@ -50,10 +50,25 @@ const updateService = async(req, res) => {
     }
 }
 
+const getServiceById = async(req, res) => {
+    try {
+        const { serviceId } = req.params
+        const service = await Service.findOne({ _id: serviceId })
+        if (service) {
+            res.status(StatusCodes.OK).json({ message: "Done", data: service });
+        } else {
+            res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid service" });
+        }
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get service" });
+    }
+}
+
 
 
 module.exports = {
     addService,
     getAllServices,
-    updateService
+    updateService,
+    getServiceById
 }
