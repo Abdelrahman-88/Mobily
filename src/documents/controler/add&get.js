@@ -132,7 +132,7 @@ const getAllDocuments = async(req, res) => {
             to = new Date()
         }
         Object.keys(rest).forEach(key => {
-            if (rest[key] === '') {
+            if (rest[key] === '' || value[key] === undefined || value[key] === null) {
                 delete rest[key];
             }
         });

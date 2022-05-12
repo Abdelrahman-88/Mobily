@@ -1,8 +1,13 @@
 const ADD_ORDER = "user:ADD_ORDER"
 const GET_ORDER_BY_ID = "user:GET_ORDER_BY_ID"
-
+const GET_ALL_ORDERS = "admin:GET_ALL_ORDERS"
+const VALIDATE_ORDER = "admin:VALIDATE_ORDER"
+const GET_USER_ORDERS = "user:GET_USER_ORDERS"
 
 module.exports = {
     ADD_ORDER,
-    GET_ORDER_BY_ID
+    GET_ORDER_BY_ID,
+    GET_ALL_ORDERS,
+    VALIDATE_ORDER,
+    GET_USER_ORDERS
 }

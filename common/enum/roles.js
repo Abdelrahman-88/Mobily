@@ -1,6 +1,7 @@
 const roles = Object.freeze({
     ADMIN: "admin",
-    USER: "user"
+    USER: "user",
+    OPERATOR: "operator"
 })
 
 

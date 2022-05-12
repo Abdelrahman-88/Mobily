@@ -4,7 +4,11 @@ const {
     GET_DOCUMENT,
     VALIDATE_DOCUMENT
 } = require("../../../src/documents/endPoints");
-const { GET_ORDER_BY_ID } = require("../../../src/orders/endPoints");
+const {
+    GET_ORDER_BY_ID,
+    GET_ALL_ORDERS,
+    VALIDATE_ORDER
+} = require("../../../src/orders/endPoints");
 const {
     ADD_SERVICE,
     UPDATE_SERVICE
@@ -14,5 +18,5 @@ const {
 } = require("../../../src/users/endPoint");
 
 module.exports = [ADD_ADMIN, GET_ALL_DOCUMENT, GET_DOCUMENT, VALIDATE_DOCUMENT, USER_EXPIRE_DOCMENT, ADD_SERVICE, UPDATE_SERVICE,
-    GET_ORDER_BY_ID
+    GET_ORDER_BY_ID, GET_ALL_ORDERS, VALIDATE_ORDER
 ]

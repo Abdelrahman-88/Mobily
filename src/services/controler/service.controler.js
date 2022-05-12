@@ -28,7 +28,7 @@ const getAllServices = async(req, res) => {
         if (servies.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: servies.totalPages, total: servies.total, data: servies.data });
         } else {
-            res.status(StatusCodes.BAD_REQUEST).json({ message: "No service found" });
+            res.status(StatusCodes.BAD_REQUEST).json({ message: "No services found" });
         }
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get all services" });
