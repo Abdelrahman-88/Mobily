@@ -8,7 +8,7 @@ const getOrderById = async(req, res) => {
         const { orderId } = req.params
         const order = await Order.findOne({ orderId }).populate("createdBy serviceId", "-password -verificationKey")
         if (order) {
-            if (req.user._id.equals(order.createdBy._id) || req.user.role == "admin") {
+            if (req.user._id.equals(order.createdBy._id) || req.user.role == "admin" || req.user.role == "operator") {
                 res.status(StatusCodes.OK).json({ message: "Done", data: order });
             } else {
                 res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
