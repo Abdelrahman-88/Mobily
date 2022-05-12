@@ -13,7 +13,7 @@ const userSchema = new Schema({
     employeeId: { type: Number },
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user"],
         default: "user"
     },
     verificationKey: { type: String, required: true },

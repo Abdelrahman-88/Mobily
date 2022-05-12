@@ -6,10 +6,16 @@ const dbConnection = () => mongoose.connect(process.env.CONNECTIONSTRING)
     })
     .catch((error) => { console.log(error); });
 
-const conn = mongoose.createConnection(process.env.CONNECTIONSTRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+let conn
+try {
+    conn = mongoose.createConnection(process.env.CONNECTIONSTRING, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    console.log("db connected");
+} catch (error) {
+    console.log(error);
+}
 
 
 

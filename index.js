@@ -5,7 +5,9 @@ const { dbConnection, conn } = require('./common/connection/confg')
 const {
     userRouter,
     documentRouter,
-    adminRouter
+    adminRouter,
+    serviceRouter,
+    orderRouter
 } = require('./common/router/allRoutes')
 const runJob = require('./common/jobs')
 
@@ -18,7 +20,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => res.send('welcome'))
-app.use(userRouter, documentRouter, adminRouter)
+app.use(userRouter, documentRouter, adminRouter, serviceRouter, orderRouter)
 dbConnection()
 
 runJob()

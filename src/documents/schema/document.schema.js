@@ -14,11 +14,6 @@ const documentSchema = new Schema({
         type: String,
         enum: ["open", "closed", "pending"],
         default: "open"
-    },
-    stage: {
-        type: String,
-        enum: ["stage1", "stage2"],
-        default: "stage1"
     }
 }, { timestamps: true })
 

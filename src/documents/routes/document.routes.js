@@ -35,7 +35,6 @@ router.get("/getAllDocuments", validation(getAllDocumentsSchema), isAuthorized(G
 
 router.put("/validateDocument/:documentId", validation(validateDocumentSchema), isAuthorized(VALIDATE_DOCUMENT), validateDocument);
 
-router.put("/activateService/:documentId", validation(activateServiceSchema), isAuthorized(ACTIVATE_SERVICE), activateService)
 
 
 

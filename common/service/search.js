@@ -1,6 +1,10 @@
-const searchService = async(search, key, value, limit, skip, model, fields, populate, select) => {
+const searchService = async(search, value, limit, skip, model, fields, populate, select) => {
     let data, total, totalPages
-
+    Object.keys(value).forEach(key => {
+        if (value[key] === '') {
+            delete value[key];
+        }
+    });
     if (search) {
         const queries = fields.map((i) => {
             return {
@@ -8,20 +12,20 @@ const searchService = async(search, key, value, limit, skip, model, fields, popu
             };
         });
         data = await model.find({
-            [key]: value,
+            ...value,
             $or: queries
         }).populate(populate).select(select).skip(skip).limit(parseInt(limit))
         total = await model.find({
-            [key]: value,
+            ...value,
             $or: queries
         }).populate(populate).select(select).count()
         totalPages = Math.ceil(total / limit)
     } else {
         data = await model.find({
-            [key]: value
+            ...value
         }).populate(populate, select).skip(skip).limit(parseInt(limit))
         total = await model.find({
-            [key]: value
+            ...value
         }).populate(populate, select).count()
         totalPages = Math.ceil(total / limit)
     }

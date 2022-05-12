@@ -46,7 +46,7 @@ const addDocument = async(req, res) => {
                             const newDocument = new Document({ createdBy, documents: filesUrl })
                             const data = await newDocument.save()
                                 // const updateUser = await User.updateOne({ _id: createdBy }, { documentId: [...user.documentId, newDocument._id] })
-                            res.status(StatusCodes.CREATED).json({ message: "done", data });
+                            res.status(StatusCodes.CREATED).json({ message: "Documents added successfully", data });
                         } else {
                             res.status(StatusCodes.BAD_REQUEST).json({ message: "Documents is required" });
                         }
@@ -116,7 +116,7 @@ const displayDocument = async(req, res) => {
         }
 
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get document" });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to display document" });
     }
 }
 
