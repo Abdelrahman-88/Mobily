@@ -10,7 +10,7 @@ const userSchema = new Schema({
     documentId: { type: Schema.Types.ObjectId, ref: "document" },
     documentExpiryDate: Date,
     documentValidity: { type: Boolean, default: false },
-    employeeId: { type: Number },
+    salesId: { type: Number },
     role: {
         type: String,
         enum: ["user"],

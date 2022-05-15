@@ -10,7 +10,8 @@ module.exports = {
             position: Joi.string().required(),
             email: Joi.string().required().email(),
             password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required(),
-            cPassword: Joi.ref('password')
+            cPassword: Joi.ref('password'),
+            salesId: Joi.number().allow(null, '')
         })
     },
     verifyEmailSchema: {

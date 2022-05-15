@@ -16,7 +16,7 @@ const documentSchema = new Schema({
         default: "open"
     },
     seen: { type: Boolean, required: true, default: true },
-    comment: { type: String, required: true }
+    comment: { type: String }
 }, { timestamps: true })
 
 

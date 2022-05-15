@@ -24,22 +24,29 @@ const addDocument = async(req, res) => {
                 const user = await User.findOne({ _id: createdBy });
                 if (user) {
                     if (req.files) {
-                        if (req.files.authorization && req.files.commercialR) {
-                            let filesUrl = [{
-                                        name: req.files.authorization[0].filename,
-                                        url: process.env.URL + 'displayDocument/' + req.files.authorization[0].filename
-                                    },
-                                    {
-                                        name: req.files.commercialR[0].filename,
-                                        url: process.env.URL + 'displayDocument/' + req.files.commercialR[0].filename
-                                    }
-                                ]
-                                // for (let index = 0; index < req.files.length; index++) {
-                                //     // filesUrl.push(`${process.env.URL}${req.files[index].filename}`)
-                                //     filesUrl.push({
-                                //         name: req.files[index].filename,
-                                //         url: process.env.URL + 'displayDocument/' + req.files[index].filename
-                                //     })
+                        if (req.files.authorization && req.files.commercialR && req.files.valueC && req.files.iD) {
+                            let filesUrl = [];
+                            for (let key of Object.keys(req.files)) {
+                                filesUrl.push({
+                                    name: req.files[key][0].filename,
+                                    url: process.env.URL + 'displayDocument/' + req.files[key][0].filename
+                                })
+                            }
+                            // filesUrl = [{
+                            //             name: req.files.authorization[0].filename,
+                            //             url: process.env.URL + 'displayDocument/' + req.files.authorization[0].filename
+                            //         },
+                            //         {
+                            //             name: req.files.commercialR[0].filename,
+                            //             url: process.env.URL + 'displayDocument/' + req.files.commercialR[0].filename
+                            //         }
+                            //     ]
+                            // for (let index = 0; index < req.files.length; index++) {
+                            //     // filesUrl.push(`${process.env.URL}${req.files[index].filename}`)
+                            //     filesUrl.push({
+                            //         name: req.files[index].filename,
+                            //         url: process.env.URL + 'displayDocument/' + req.files[index].filename
+                            //     })
 
                             //     // const file = await gfs.files.findOne({ filename: req.files[index].filename });
                             //     // const readStream = gfs.openDownloadStreamByName(req.files[index].filename).pipe(res);
@@ -63,6 +70,7 @@ const addDocument = async(req, res) => {
             }
         }
     } catch (error) {
+        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to add document" });
     }
 }

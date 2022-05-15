@@ -4,11 +4,12 @@ const sendEmail = require("../../../common/service/sendEmail");
 const { verificationTemplate } = require("../../../common/service/template");
 const User = require("../model/user.model");
 const jwt = require('jsonwebtoken');
+const Admin = require("../../admins/model/admin.model");
 
 
 const register = async(req, res) => {
     try {
-        let { name, email, companyName, position, password, cPassword } = req.body
+        let { name, email, companyName, position, password, cPassword, salesId } = req.body
         email = email.toLowerCase()
         const subject = `Email confirmation`
         const emailExist = await User.findOne({ email, deactivated: false });
@@ -17,7 +18,17 @@ const register = async(req, res) => {
         } else {
             if (password == cPassword) {
                 const verificationKey = nanoid()
-                const newUser = new User({ name, email, companyName, position, password, verificationKey });
+                let newUser;
+                if (salesId) {
+                    const sales = await Admin.findOne({ employeeId: salesId, role: "sales" })
+                    if (sales) {
+                        newUser = new User({ name, email, companyName, position, password, verificationKey, salesId });
+                    } else {
+                        res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid sales id" });
+                    }
+                } else {
+                    newUser = new User({ name, email, companyName, position, password, verificationKey });
+                }
                 const user = await newUser.save();
                 const info = await sendEmail([email], verificationTemplate(verificationKey), subject)
                 if (info.messageId) {

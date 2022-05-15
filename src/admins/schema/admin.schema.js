@@ -6,7 +6,7 @@ const adminSchema = new Schema({
     position: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
-    employeeId: { type: Number },
+    employeeId: { type: Number, unique: true },
     role: {
         type: String,
         enum: ["admin", "sales", "operator", "techS", "callC"],

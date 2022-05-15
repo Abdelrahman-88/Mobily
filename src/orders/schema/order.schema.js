@@ -12,7 +12,7 @@ const orderSchema = new Schema({
     },
     activated: { type: Boolean, required: true, default: false },
     seen: { type: Boolean, required: true, default: true },
-    comment: { type: String, required: true },
+    comment: { type: String },
     ban: { type: Boolean, default: false }
 
 }, { timestamps: true })

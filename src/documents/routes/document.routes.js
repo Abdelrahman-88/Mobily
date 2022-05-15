@@ -32,7 +32,13 @@ const { getSeenDocuments, updateSeenDocuments } = require("../controler/seen");
 const router = require("express").Router();
 
 
-router.post("/addDocument/:createdBy", upload.fields([{ name: 'authorization', maxCount: 1 }, { name: 'commercialR', maxCount: 1 }]), validation(addDocumentSchema), isAuthorized(UPLOAD_FILE), addDocument)
+router.post("/addDocument/:createdBy", upload.fields([
+    { name: 'authorization', maxCount: 1 },
+    { name: 'commercialR', maxCount: 1 },
+    { name: 'valueC', maxCount: 1 },
+    { name: 'iD', maxCount: 1 },
+    { name: 'insuranceC', maxCount: 1 },
+]), validation(addDocumentSchema), isAuthorized(UPLOAD_FILE), addDocument)
 
 router.get("/getDocument/:documentId", validation(getDocumentSchema), isAuthorized(GET_DOCUMENT), getDocument);
 
