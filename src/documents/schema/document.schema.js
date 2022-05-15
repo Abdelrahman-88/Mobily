@@ -14,7 +14,9 @@ const documentSchema = new Schema({
         type: String,
         enum: ["open", "closed", "pending"],
         default: "open"
-    }
+    },
+    seen: { type: Boolean, required: true, default: true },
+    comment: { type: String, required: true }
 }, { timestamps: true })
 
 

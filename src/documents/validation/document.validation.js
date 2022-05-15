@@ -33,7 +33,33 @@ module.exports = {
         body: Joi.object().required().keys({
             expiryDate: Joi.date().required(),
             valid: Joi.string().valid('valid', 'invalid').required(),
-            status: Joi.string().valid('closed', 'pending').required()
+            status: Joi.string().valid('closed', 'pending').required(),
+            comment: Joi.string().required()
+        })
+    },
+    getUserDocumentsSchema: {
+        params: Joi.object().required().keys({
+            createdBy: Joi.string().required().min(24).max(24)
+        }),
+        query: Joi.object().required().keys({
+            page: Joi.string().allow(''),
+            size: Joi.string().allow(''),
+            status: Joi.string().valid("open", "closed", "pending").allow(''),
+            valid: Joi.string().valid("valid", "invalid").allow('')
+        })
+    },
+    getSeenDocumentsSchema: {
+        params: Joi.object().required().keys({
+            createdBy: Joi.string().required().min(24).max(24)
+        }),
+        query: Joi.object().required().keys({
+            page: Joi.string().allow(''),
+            size: Joi.string().allow('')
+        })
+    },
+    updateSeenDocumentsSchema: {
+        params: Joi.object().required().keys({
+            createdBy: Joi.string().required().min(24).max(24)
         })
     }
 }

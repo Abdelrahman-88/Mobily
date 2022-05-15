@@ -1,4 +1,4 @@
-const { addDocument, getDocument, displayDocument, getAllDocuments } = require("../controler/add&get");
+const { addDocument, getDocument, displayDocument, getAllDocuments, getUserDocuments } = require("../controler/add&get");
 const isAuthorized = require("../../../common/middelWare/isAuthorized");
 const validation = require("../../../common/middelWare/validation");
 const upload = require("../../../common/service/uploadFile")
@@ -8,19 +8,26 @@ const {
     displayDocumentSchema,
     getAllDocumentsSchema,
     validateDocumentSchema,
-    activateServiceSchema
+    activateServiceSchema,
+    getUserDocumentsSchema,
+    getSeenDocumentsSchema,
+    updateSeenDocumentsSchema
 } = require("../validation/document.validation");
 const {
     UPLOAD_FILE,
     GET_ALL_DOCUMENT,
     GET_DOCUMENT,
     VALIDATE_DOCUMENT,
-    ACTIVATE_SERVICE
+    ACTIVATE_SERVICE,
+    GET_USER_DOCUMENTS,
+    GET_SEEN_DOCUMENTS,
+    UPDATE_SEEN_DOCUMENTS
 } = require("../endPoints");
 const {
     validateDocument,
     activateService
 } = require("../controler/validate");
+const { getSeenDocuments, updateSeenDocuments } = require("../controler/seen");
 
 const router = require("express").Router();
 
@@ -35,7 +42,11 @@ router.get("/getAllDocuments", validation(getAllDocumentsSchema), isAuthorized(G
 
 router.put("/validateDocument/:documentId", validation(validateDocumentSchema), isAuthorized(VALIDATE_DOCUMENT), validateDocument);
 
+router.get("/getUserDocuments/:createdBy", validation(getUserDocumentsSchema), isAuthorized(GET_USER_DOCUMENTS), getUserDocuments);
 
+router.get("/getSeenDocuments/:createdBy", validation(getSeenDocumentsSchema), isAuthorized(GET_SEEN_DOCUMENTS), getSeenDocuments);
+
+router.patch("/updateSeenDocuments/:createdBy", validation(updateSeenDocumentsSchema), isAuthorized(UPDATE_SEEN_DOCUMENTS), updateSeenDocuments)
 
 
 

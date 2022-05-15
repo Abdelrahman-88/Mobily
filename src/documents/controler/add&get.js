@@ -74,7 +74,7 @@ const getDocument = async(req, res) => {
         const document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey')
         if (document) {
             let { _id } = document.createdBy
-            if (req.user._id.equals(_id) || req.user.role == "admin") {
+            if (req.user._id.equals(_id) || req.user.role == "admin" || req.user.role == "operator") {
                 res.status(StatusCodes.OK).json({ message: "done", document });
 
             } else {
@@ -149,10 +149,35 @@ const getAllDocuments = async(req, res) => {
 }
 
 
+const getUserDocuments = async(req, res) => {
+    try {
+        const { createdBy } = req.params
+        if (req.user._id == createdBy) {
+            let { page, size, status, valid } = req.query
+            const { skip, limit, currentPage } = pageService(page, size)
+            const documents = await searchServies("", { createdBy, status, valid }, limit, skip, Document, [], "", "")
+            if (documents.data.length) {
+                res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: documents.totalPages, total: documents.total, data: documents.data });
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "No documents found" });
+            }
+        } else {
+            res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+        }
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get documents" });
+    }
+}
+
+
+
+
+
 
 module.exports = {
     addDocument,
     getDocument,
     displayDocument,
-    getAllDocuments
+    getAllDocuments,
+    getUserDocuments
 }

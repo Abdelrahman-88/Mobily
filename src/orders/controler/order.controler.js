@@ -23,5 +23,27 @@ const addOrder = async(req, res) => {
 }
 
 
+const updateSeenOrders = async(req, res) => {
+    try {
+        const { createdBy } = req.params
+        if (req.user._id == createdBy) {
+            const seen = await Order.updateMany({ createdBy, seen: false }, { seen: true })
+            if (seen.matchedCount) {
+                res.status(StatusCodes.OK).json({ message: "Updated to seen successfully" });
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "No unseen orders found" });
+            }
+        } else {
+            res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+        }
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get unseen orders" });
+    }
+}
 
-module.exports = { addOrder }
+
+
+module.exports = {
+    addOrder,
+    updateSeenOrders
+}

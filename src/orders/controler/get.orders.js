@@ -8,7 +8,7 @@ const getOrderById = async(req, res) => {
         const { orderId } = req.params
         const order = await Order.findOne({ orderId }).populate("createdBy serviceId", "-password -verificationKey")
         if (order) {
-            if (req.user._id.equals(order.createdBy._id) || req.user.role == "admin" || req.user.role == "operator") {
+            if (req.user._id.equals(order.createdBy._id) || req.user.role == "operator") {
                 res.status(StatusCodes.OK).json({ message: "Done", data: order });
             } else {
                 res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
@@ -59,9 +59,31 @@ const getUserOrders = async(req, res) => {
 }
 
 
+const getSeenOrders = async(req, res) => {
+    try {
+        const { createdBy } = req.params
+        if (req.user._id == createdBy) {
+            let { page, size } = req.query
+            const { skip, limit, currentPage } = pageService(page, size)
+            const orders = await searchServies("", { createdBy, seen: false }, limit, skip, Order, [], "", "")
+            if (orders.data.length) {
+                res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "No seen orders found" });
+            }
+        } else {
+            res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+        }
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get seen orders" });
+    }
+}
+
+
 
 module.exports = {
     getOrderById,
     getAllOrders,
-    getUserOrders
+    getUserOrders,
+    getSeenOrders
 }

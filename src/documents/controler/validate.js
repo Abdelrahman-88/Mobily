@@ -5,7 +5,7 @@ const Document = require("../model/document.model");
 const validateDocument = async(req, res) => {
     try {
         const { documentId } = req.params
-        let { expiryDate, valid, status } = req.body
+        let { expiryDate, valid, status, comment } = req.body
         expiryDate = new Date(expiryDate).toISOString()
         const now = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
         const validDoc = await Document.findOne({ _id: documentId, status: "closed" })
@@ -14,7 +14,7 @@ const validateDocument = async(req, res) => {
         } else {
             if (expiryDate > now) {
                 if (valid == 'valid' && status == "closed") {
-                    const document = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status })
+                    const document = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false })
                     const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true })
                     if (document) {
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
@@ -22,7 +22,7 @@ const validateDocument = async(req, res) => {
                         res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
                     }
                 } else {
-                    const document = await Document.findOneAndUpdate({ _id: documentId }, { valid, status })
+                    const document = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment })
                     if (document) {
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                     } else {

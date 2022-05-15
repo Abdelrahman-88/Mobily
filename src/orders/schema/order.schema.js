@@ -10,7 +10,10 @@ const orderSchema = new Schema({
         required: true,
         default: "open"
     },
-    activated: { type: Boolean, required: true, default: false }
+    activated: { type: Boolean, required: true, default: false },
+    seen: { type: Boolean, required: true, default: true },
+    comment: { type: String, required: true },
+    ban: { type: Boolean, default: false }
 
 }, { timestamps: true })
 

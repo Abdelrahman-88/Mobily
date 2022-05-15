@@ -14,7 +14,7 @@ module.exports = {
 
         })
     },
-    getAllOrdersSchems: {
+    getAllOrdersSchema: {
         query: Joi.object().required().keys({
             page: Joi.string().allow(''),
             size: Joi.string().allow(''),
@@ -29,9 +29,11 @@ module.exports = {
         body: Joi.object().required().keys({
             activated: Joi.boolean().required(),
             status: Joi.string().valid("closed", "pending").required(),
+            comment: Joi.string().required(),
+            ban: Joi.boolean()
         })
     },
-    getUserOrdersSchems: {
+    getUserOrdersSchema: {
         params: Joi.object().required().keys({
             createdBy: Joi.string().required().min(24).max(24)
         }),
@@ -40,6 +42,20 @@ module.exports = {
             size: Joi.string().allow(''),
             status: Joi.string().valid("open", "closed", "pending").allow(''),
             activated: Joi.boolean().allow('')
+        })
+    },
+    getSeenOrdersSchema: {
+        params: Joi.object().required().keys({
+            createdBy: Joi.string().required().min(24).max(24)
+        }),
+        query: Joi.object().required().keys({
+            page: Joi.string().allow(''),
+            size: Joi.string().allow('')
+        })
+    },
+    updateSeenOrdersSchema: {
+        params: Joi.object().required().keys({
+            createdBy: Joi.string().required().min(24).max(24)
         })
     }
 }

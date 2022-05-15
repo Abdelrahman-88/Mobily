@@ -32,5 +32,10 @@ module.exports = {
             status: Joi.string().valid("valid", "expired", "pending").required(),
             category: Joi.string().valid("category1", "category2", "category3").required()
         })
+    },
+    getServiceByIdSchema: {
+        params: Joi.object().required().keys({
+            serviceId: Joi.string().required().min(24).max(24)
+        })
     }
 }
