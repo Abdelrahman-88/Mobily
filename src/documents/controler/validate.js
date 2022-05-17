@@ -7,7 +7,8 @@ const validateDocument = async(req, res) => {
         const { documentId } = req.params
         let { expiryDate, valid, status, comment } = req.body
         expiryDate = new Date(expiryDate).toISOString()
-        const now = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 2, 0, 0, 0).toISOString()
+        const now = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1, 0, 0, 0).toISOString()
+        console.log(expiryDate, now);
         const validDoc = await Document.findOne({ _id: documentId, status: "closed" })
         if (validDoc) {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Document already closed" });
