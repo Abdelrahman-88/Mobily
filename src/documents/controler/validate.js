@@ -12,7 +12,7 @@ const validateDocument = async(req, res) => {
         if (validDoc) {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Document already closed" });
         } else {
-            if (expiryDate > now) {
+            if (expiryDate >= now) {
                 if (valid == 'valid' && status == "closed") {
                     const document = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false })
                     const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true })
