@@ -6,7 +6,7 @@ const searchServies = require("../../../common/service/search")
 const getOrderById = async(req, res) => {
     try {
         const { orderId } = req.params
-        const order = await Order.findOne({ orderId }).populate("createdBy serviceId", "-password -verificationKey")
+        const order = await Order.findOne({ _id: orderId }).populate("createdBy serviceId", "-password -verificationKey")
         if (order) {
             if (req.user._id.equals(order.createdBy._id) || req.user.role == "operator") {
                 res.status(StatusCodes.OK).json({ message: "Done", data: order });

@@ -7,34 +7,35 @@ const validateDocument = async(req, res) => {
         const { documentId } = req.params
         let { expiryDate, valid, status, comment } = req.body
         expiryDate = new Date(expiryDate).toISOString()
-        const now = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1, 0, 0, 0).toISOString()
-        console.log(expiryDate, now);
+        const validDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1, 0, 0, 0).toISOString()
+        const now = new Date().toISOString()
         const validDoc = await Document.findOne({ _id: documentId, status: "closed" })
         if (validDoc) {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Document already closed" });
         } else {
-            if (expiryDate >= now) {
-                if (valid == 'valid' && status == "closed") {
-                    const document = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false })
-                    const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true })
-                    if (document) {
+            const document = await Document.findOne({ _id: documentId })
+            if (document) {
+                const { employeeId } = req.user._doc
+                const activity = [{ employeeId, comment, date: now }, ...document.activity]
+                if (expiryDate > validDate) {
+                    if (valid == 'valid' && status == "closed") {
+                        const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity })
+                        const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true })
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
+
                     } else {
-                        res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
+                        const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity })
+                        res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                     }
                 } else {
-                    const document = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment })
-                    if (document) {
-                        res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
-                    } else {
-                        res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
-                    }
+                    res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid expiry date" });
                 }
             } else {
-                res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid expiry date" });
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
             }
         }
     } catch (error) {
+        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to validate document" });
     }
 }
@@ -47,8 +48,8 @@ const removeOrderAction = async(req, res) => {
         const document = await Document.findOne({ _id: documentId })
         if (document) {
             if (document.action) {
-                if (req.user._id.equals(document.action)) {
-                    const remove = await Document.findOneAndUpdate({ _id: documentId }, { action: "" })
+                if (req.user._id.equals(document.actionBy)) {
+                    const remove = await Document.findOneAndUpdate({ _id: documentId }, { action: false, actionBy: "" })
                     res.status(StatusCodes.OK).json({ message: "Action removed successfully" });
                 } else {
                     res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });

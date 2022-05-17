@@ -3,7 +3,8 @@ const { Schema } = require("mongoose")
 
 const documentSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: "user" },
-    action: { type: Schema.Types.String, ref: "admin" },
+    actionBy: { type: Schema.Types.String, ref: "admin" },
+    action: { type: Boolean, default: false },
     documents: [{ type: Object, required: true }],
     expiryDate: Date,
     valid: {
@@ -17,7 +18,7 @@ const documentSchema = new Schema({
         default: "open"
     },
     seen: { type: Boolean, required: true, default: true },
-    comment: { type: String }
+    activity: [{ type: Object }]
 }, { timestamps: true })
 
 

@@ -86,7 +86,7 @@ const getDocument = async(req, res) => {
                 res.status(StatusCodes.OK).json({ message: "done", document });
 
             } else if (req.user.role == "admin" || req.user.role == "operator") {
-                const action = await Document.findOneAndUpdate({ _id: documentId, status: "open" }, { action: req.user._id }, { new: true }).populate("action", "employeeId")
+                const action = await Document.findOneAndUpdate({ _id: documentId }, { actionBy: req.user._id, action: true }, { new: true }).populate("action", "employeeId")
                 if (action) {
                     res.status(StatusCodes.OK).json({ message: "done", document: action });
                 } else {
@@ -139,7 +139,7 @@ const displayDocument = async(req, res) => {
 const getAllDocuments = async(req, res) => {
     try {
 
-        let { page, size, from, to, status, valid } = req.query
+        let { page, size, from, to, status, valid, action } = req.query
         if (!from) {
             from = new Date('2022')
         }
@@ -150,7 +150,7 @@ const getAllDocuments = async(req, res) => {
         from = new Date(from).toISOString()
         to = new Date(to).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)
-        const documents = await searchServies("", { status, valid }, limit, skip, Document, [], "createdBy", "-password -verificationKey")
+        const documents = await searchServies("", { status, valid, action }, limit, skip, Document, [], "createdBy", "-password -verificationKey")
         if (documents.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: documents.totalPages, total: documents.total, data: documents.data });
         } else {

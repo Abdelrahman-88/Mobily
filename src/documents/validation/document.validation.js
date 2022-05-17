@@ -23,7 +23,8 @@ module.exports = {
             valid: Joi.string().valid('valid', 'invalid').allow(''),
             status: Joi.string().valid('open', 'closed', 'pending').allow(''),
             from: Joi.date().allow(''),
-            to: Joi.date().allow('')
+            to: Joi.date().allow(''),
+            action: Joi.boolean().allow('')
         })
     },
     validateDocumentSchema: {
