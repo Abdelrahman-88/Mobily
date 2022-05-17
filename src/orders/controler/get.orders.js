@@ -27,7 +27,7 @@ const getAllOrders = async(req, res) => {
     try {
         let { page, size, status, activated } = req.query
         const { skip, limit, currentPage } = pageService(page, size)
-        const orders = await searchServies("", { status, activated }, limit, skip, Order, [], "", "")
+        const orders = await searchServies("", { status, activated }, limit, skip, Order, [], "serviceId", "name")
         if (orders.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
         } else {
@@ -44,7 +44,7 @@ const getUserOrders = async(req, res) => {
         if (req.user._id == createdBy) {
             let { page, size, status, activated } = req.query
             const { skip, limit, currentPage } = pageService(page, size)
-            const orders = await searchServies("", { createdBy, status, activated }, limit, skip, Order, [], "", "")
+            const orders = await searchServies("", { createdBy, status, activated }, limit, skip, Order, [], "serviceId", "name")
             if (orders.data.length) {
                 res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
             } else {

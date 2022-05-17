@@ -18,5 +18,10 @@ module.exports = {
             employeeId: Joi.number().required(),
             password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required()
         })
+    },
+    adminLogOutSchema: {
+        params: Joi.object().required().keys({
+            id: Joi.string().required().min(24).max(24)
+        })
     }
 }

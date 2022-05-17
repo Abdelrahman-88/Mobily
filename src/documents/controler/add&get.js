@@ -82,17 +82,22 @@ const getDocument = async(req, res) => {
         const document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey')
         if (document) {
             let { _id } = document.createdBy
-            if (req.user._id.equals(_id) || req.user.role == "admin" || req.user.role == "operator") {
+            if (req.user._id.equals(_id)) {
                 res.status(StatusCodes.OK).json({ message: "done", document });
 
+            } else if (req.user.role == "admin" || req.user.role == "operator") {
+                const action = await Document.findOneAndUpdate({ _id: documentId, status: "open" }, { action: req.user._id }, { new: true }).populate("action", "employeeId")
+                if (action) {
+                    res.status(StatusCodes.OK).json({ message: "done", document: action });
+                } else {
+                    res.status(StatusCodes.OK).json({ message: "done", document });
+                }
             } else {
-                res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED1" });
+                res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
             }
-
         } else {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid document" });
         }
-
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get document" });
     }

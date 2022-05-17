@@ -3,6 +3,7 @@ const { Schema } = require("mongoose")
 
 const documentSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: "user" },
+    action: { type: Schema.Types.String, ref: "admin" },
     documents: [{ type: Object, required: true }],
     expiryDate: Date,
     valid: {

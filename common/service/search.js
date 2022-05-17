@@ -1,6 +1,5 @@
 const searchService = async(search, value, limit, skip, model, fields, populate, select) => {
     let data, total, totalPages
-    console.log(value);
     Object.keys(value).forEach(key => {
         if (value[key] === '' || value[key] === undefined || value[key] === null) {
             delete value[key];

@@ -27,5 +27,26 @@ const adminLogIn = async(req, res) => {
     }
 }
 
+const adminLogOut = async(req, res) => {
+    try {
+        const { id } = req.params
+        if (id == req.user._id) {
+            const data = await Admin.findOneAndUpdate({ _id: id, logedIn: true }, { logedIn: false }, { new: true });
+            if (data) {
+                res.status(StatusCodes.OK).json({ message: "Logout successfully" });
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid user" });
+            }
+        } else {
+            res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+        }
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Failed to logout" });
+    }
+}
 
-module.exports = { adminLogIn }
+
+module.exports = {
+    adminLogIn,
+    adminLogOut
+}

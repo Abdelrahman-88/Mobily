@@ -7,7 +7,7 @@ const validateDocument = async(req, res) => {
         const { documentId } = req.params
         let { expiryDate, valid, status, comment } = req.body
         expiryDate = new Date(expiryDate).toISOString()
-        const now = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString()
+        const now = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 2, 0, 0, 0).toISOString()
         const validDoc = await Document.findOne({ _id: documentId, status: "closed" })
         if (validDoc) {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Document already closed" });
@@ -40,4 +40,33 @@ const validateDocument = async(req, res) => {
 
 
 
-module.exports = { validateDocument }
+const removeOrderAction = async(req, res) => {
+    try {
+        const { documentId } = req.params;
+        const document = await Document.findOne({ _id: documentId })
+        if (document) {
+            if (document.action) {
+                if (req.user._id.equals(document.action)) {
+                    const remove = await Document.findOneAndUpdate({ _id: documentId }, { action: "" })
+                    res.status(StatusCodes.OK).json({ message: "Action removed successfully" });
+                } else {
+                    res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                }
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "No action found" });
+            }
+        } else {
+            res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to remove action" });
+    }
+}
+
+
+
+module.exports = {
+    validateDocument,
+    removeOrderAction
+}

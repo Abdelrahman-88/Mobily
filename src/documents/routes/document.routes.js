@@ -8,10 +8,10 @@ const {
     displayDocumentSchema,
     getAllDocumentsSchema,
     validateDocumentSchema,
-    activateServiceSchema,
     getUserDocumentsSchema,
     getSeenDocumentsSchema,
-    updateSeenDocumentsSchema
+    updateSeenDocumentsSchema,
+    removeOrderActionSchema
 } = require("../validation/document.validation");
 const {
     UPLOAD_FILE,
@@ -21,11 +21,13 @@ const {
     ACTIVATE_SERVICE,
     GET_USER_DOCUMENTS,
     GET_SEEN_DOCUMENTS,
-    UPDATE_SEEN_DOCUMENTS
+    UPDATE_SEEN_DOCUMENTS,
+    REMOVE_ORDER_ACTION
 } = require("../endPoints");
 const {
     validateDocument,
-    activateService
+    activateService,
+    removeOrderAction
 } = require("../controler/validate");
 const { getSeenDocuments, updateSeenDocuments } = require("../controler/seen");
 
@@ -54,7 +56,7 @@ router.get("/getSeenDocuments/:createdBy", validation(getSeenDocumentsSchema), i
 
 router.patch("/updateSeenDocuments/:createdBy", validation(updateSeenDocumentsSchema), isAuthorized(UPDATE_SEEN_DOCUMENTS), updateSeenDocuments)
 
-
+router.patch("/removeOrderAction/:documentId", validation(removeOrderActionSchema), isAuthorized(REMOVE_ORDER_ACTION), removeOrderAction)
 
 
 module.exports = router;
