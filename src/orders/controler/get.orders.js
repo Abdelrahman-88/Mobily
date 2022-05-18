@@ -11,7 +11,7 @@ const getOrderById = async(req, res) => {
             if (req.user._id.equals(order.createdBy._id)) {
                 res.status(StatusCodes.OK).json({ message: "Done", data: order });
             } else if (req.user.role == "operator") {
-                const action = await Order.findOneAndUpdate({ _id: orderId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("action", "employeeId")
+                const action = await Order.findOneAndUpdate({ _id: orderId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("createdBy serviceId", "-password -verificationKey").populate("actionBy", "employeeId")
                 if (action) {
                     res.status(StatusCodes.OK).json({ message: "done", data: action });
                 } else {

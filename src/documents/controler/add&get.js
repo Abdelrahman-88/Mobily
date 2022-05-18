@@ -86,7 +86,7 @@ const getDocument = async(req, res) => {
                 res.status(StatusCodes.OK).json({ message: "done", document });
 
             } else if (req.user.role == "admin" || req.user.role == "operator") {
-                const action = await Document.findOneAndUpdate({ _id: documentId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("action", "employeeId")
+                const action = await Document.findOneAndUpdate({ _id: documentId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
                 if (action) {
                     res.status(StatusCodes.OK).json({ message: "done", document: action });
                 } else {
