@@ -8,15 +8,21 @@ const getOrderById = async(req, res) => {
         const { orderId } = req.params
         const order = await Order.findOne({ _id: orderId }).populate("createdBy serviceId", "-password -verificationKey")
         if (order) {
-            if (req.user._id.equals(order.createdBy._id) || req.user.role == "operator") {
+            if (req.user._id.equals(order.createdBy._id)) {
                 res.status(StatusCodes.OK).json({ message: "Done", data: order });
+            } else if (req.user.role == "operator") {
+                const action = await Order.findOneAndUpdate({ _id: orderId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("action", "employeeId")
+                if (action) {
+                    res.status(StatusCodes.OK).json({ message: "done", data: action });
+                } else {
+                    res.status(StatusCodes.OK).json({ message: "done", data: order });
+                }
             } else {
                 res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
             }
         } else {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid order" });
         }
-
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get order" });
     }
@@ -25,9 +31,9 @@ const getOrderById = async(req, res) => {
 
 const getAllOrders = async(req, res) => {
     try {
-        let { page, size, status, activated } = req.query
+        let { page, size, status, activated, action } = req.query
         const { skip, limit, currentPage } = pageService(page, size)
-        const orders = await searchServies("", { status, activated }, limit, skip, Order, [], "serviceId", "name")
+        const orders = await searchServies("", { status, activated, action }, limit, skip, Order, [], "serviceId", "name")
         if (orders.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
         } else {

@@ -19,12 +19,12 @@ const validateDocument = async(req, res) => {
                 const activity = [{ employeeId, comment, date: now }, ...document.activity]
                 if (expiryDate > validDate) {
                     if (valid == 'valid' && status == "closed") {
-                        const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity })
+                        const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "" })
                         const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true })
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
 
                     } else {
-                        const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity })
+                        const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: "" })
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                     }
                 } else {
@@ -35,14 +35,13 @@ const validateDocument = async(req, res) => {
             }
         }
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to validate document" });
     }
 }
 
 
 
-const removeOrderAction = async(req, res) => {
+const removeDocumentAction = async(req, res) => {
     try {
         const { documentId } = req.params;
         const document = await Document.findOne({ _id: documentId })
@@ -61,7 +60,6 @@ const removeOrderAction = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
         }
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to remove action" });
     }
 }
@@ -70,5 +68,5 @@ const removeOrderAction = async(req, res) => {
 
 module.exports = {
     validateDocument,
-    removeOrderAction
+    removeDocumentAction
 }

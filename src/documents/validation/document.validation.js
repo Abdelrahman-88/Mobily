@@ -63,7 +63,7 @@ module.exports = {
             createdBy: Joi.string().required().min(24).max(24)
         })
     },
-    removeOrderActionSchema: {
+    removeDocumentActionSchema: {
         params: Joi.object().required().keys({
             documentId: Joi.string().required().min(24).max(24)
         })

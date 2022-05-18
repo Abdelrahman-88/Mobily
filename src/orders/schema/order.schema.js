@@ -4,6 +4,8 @@ const { Schema } = require("mongoose")
 const orderSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: "user" },
     serviceId: { type: Schema.Types.ObjectId, ref: "service" },
+    actionBy: { type: Schema.Types.String, ref: "admin" },
+    action: { type: Boolean, default: false },
     status: {
         type: String,
         enum: ["open", "closed", "pending"],
@@ -12,8 +14,8 @@ const orderSchema = new Schema({
     },
     activated: { type: Boolean, required: true, default: false },
     seen: { type: Boolean, required: true, default: true },
-    comment: { type: String },
-    ban: { type: Boolean, default: false }
+    ban: { type: Boolean, default: false },
+    activity: [{ type: Object }]
 
 }, { timestamps: true })
 
