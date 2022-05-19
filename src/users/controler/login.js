@@ -7,7 +7,7 @@ const logIn = async(req, res) => {
     try {
         let { email, password } = req.body
         email = email.toLowerCase()
-        const emailExist = await User.findOne({ email, deactivated: false, blocked: false });
+        const emailExist = await User.findOne({ email, deactivated: false, blocked: false }).populate("documentId");
         if (emailExist) {
             if (emailExist.verified) {
                 bcrypt.compare(password, emailExist.password, async function(err, result) {

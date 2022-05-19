@@ -67,5 +67,10 @@ module.exports = {
         params: Joi.object().required().keys({
             documentId: Joi.string().required().min(24).max(24)
         })
+    },
+    checkDocumentSchema: {
+        params: Joi.object().required().keys({
+            createdBy: Joi.string().required().min(24).max(24)
+        })
     }
 }

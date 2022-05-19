@@ -6,7 +6,8 @@ const pageService = (page, size) => {
         size = 10
     }
     const skip = (page - 1) * size
-    return { skip, limit: size, currentPage: page }
+
+    return { skip, limit: parseInt(size), currentPage: parseInt(page) }
 }
 
 module.exports = pageService

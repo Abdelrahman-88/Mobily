@@ -1,4 +1,11 @@
-const { addDocument, getDocument, displayDocument, getAllDocuments, getUserDocuments } = require("../controler/add&get");
+const {
+    addDocument,
+    getDocument,
+    displayDocument,
+    getAllDocuments,
+    getUserDocuments,
+    checkDocument
+} = require("../controler/add&get");
 const isAuthorized = require("../../../common/middelWare/isAuthorized");
 const validation = require("../../../common/middelWare/validation");
 const upload = require("../../../common/service/uploadFile")
@@ -11,18 +18,19 @@ const {
     getUserDocumentsSchema,
     getSeenDocumentsSchema,
     updateSeenDocumentsSchema,
-    removeDocumentActionSchema
+    removeDocumentActionSchema,
+    checkDocumentSchema
 } = require("../validation/document.validation");
 const {
     UPLOAD_FILE,
     GET_ALL_DOCUMENT,
     GET_DOCUMENT,
     VALIDATE_DOCUMENT,
-    ACTIVATE_SERVICE,
     GET_USER_DOCUMENTS,
     GET_SEEN_DOCUMENTS,
     UPDATE_SEEN_DOCUMENTS,
-    REMOVE_DOCUMENT_ACTION
+    REMOVE_DOCUMENT_ACTION,
+    CHECK_DOCUMENT
 } = require("../endPoints");
 const {
     validateDocument,
@@ -58,5 +66,6 @@ router.patch("/updateSeenDocuments/:createdBy", validation(updateSeenDocumentsSc
 
 router.patch("/removeDocumentAction/:documentId", validation(removeDocumentActionSchema), isAuthorized(REMOVE_DOCUMENT_ACTION), removeDocumentAction)
 
+router.get("/checkDocument/:createdBy", validation(checkDocumentSchema), isAuthorized(CHECK_DOCUMENT), checkDocument);
 
 module.exports = router;

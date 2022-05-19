@@ -70,7 +70,6 @@ const addDocument = async(req, res) => {
             }
         }
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to add document" });
     }
 }
@@ -182,7 +181,23 @@ const getUserDocuments = async(req, res) => {
     }
 }
 
-
+const checkDocument = async(req, res) => {
+    try {
+        const { createdBy } = req.params
+        if (req.user._id == createdBy) {
+            const document = await Document.findOne({ createdBy, status: { $ne: "closed" } })
+            if (document) {
+                res.status(StatusCodes.OK).json({ message: "Done", document });
+            } else {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "No documents found" });
+            }
+        } else {
+            res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+        }
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get document" });
+    }
+}
 
 
 
@@ -192,5 +207,6 @@ module.exports = {
     getDocument,
     displayDocument,
     getAllDocuments,
-    getUserDocuments
+    getUserDocuments,
+    checkDocument
 }
