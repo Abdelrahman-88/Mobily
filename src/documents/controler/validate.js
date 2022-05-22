@@ -22,7 +22,6 @@ const validateDocument = async(req, res) => {
                         const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "" })
                         const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true })
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
-
                     } else {
                         const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: "" })
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });

@@ -169,11 +169,16 @@ const checkDocument = async(req, res) => {
     try {
         const { createdBy } = req.params
         if (req.user._id == createdBy) {
-            const document = await Document.findOne({ createdBy, status: { $ne: "closed" } })
-            if (document) {
-                res.status(StatusCodes.OK).json({ message: "Done", document });
+            const valid = await Document.findOne({ createdBy })
+            if (valid) {
+                const document = await Document.findOne({ createdBy, status: { $ne: "closed" } })
+                if (document) {
+                    res.status(StatusCodes.OK).json({ message: "Done", document, documentValidity: req.user.documentValidity });
+                } else {
+                    res.status(StatusCodes.OK).json({ message: "No documents found", documentValidity: req.user.documentValidity });
+                }
             } else {
-                res.status(StatusCodes.BAD_REQUEST).json({ message: "No documents found" });
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
             }
         } else {
             res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
