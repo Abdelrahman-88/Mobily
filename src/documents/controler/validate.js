@@ -5,7 +5,7 @@ const Document = require("../model/document.model");
 const validateDocument = async(req, res) => {
     try {
         const { documentId } = req.params
-        let { expiryDate, valid, status, comment } = req.body
+        let { expiryDate, valid, status, comment, phone, contactEmail } = req.body
         expiryDate = new Date(expiryDate).toISOString()
         const validDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1, 0, 0, 0).toISOString()
         const now = new Date().toISOString()
@@ -20,7 +20,7 @@ const validateDocument = async(req, res) => {
                 if (expiryDate > validDate) {
                     if (valid == 'valid' && status == "closed") {
                         const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "" })
-                        const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true })
+                        const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true, phone, contactEmail })
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                     } else {
                         const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: "" })

@@ -35,7 +35,9 @@ module.exports = {
             expiryDate: Joi.date().required(),
             valid: Joi.string().valid('valid', 'invalid').required(),
             status: Joi.string().valid('closed', 'pending').required(),
-            comment: Joi.string().required()
+            comment: Joi.string().required(),
+            phone: Joi.string().required(),
+            contactEmail: Joi.string().email().required()
         })
     },
     getUserDocumentsSchema: {

@@ -11,6 +11,9 @@ const userSchema = new Schema({
     documentExpiryDate: Date,
     documentValidity: { type: Boolean, default: false },
     salesId: { type: Number },
+    city: { type: String, required: true },
+    phone: { type: String },
+    contactEmail: { type: String },
     role: {
         type: String,
         enum: ["user"],
