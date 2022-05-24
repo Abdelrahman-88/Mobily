@@ -6,6 +6,11 @@ const serviceSchema = new Schema({
     name: { type: String, required: true },
     price: { type: Number, required: true },
     desc: { type: String, required: true },
+    internet: { type: String },
+    localM: { type: String },
+    groupM: { type: String },
+    noSms: { type: String },
+    ofSms: { type: String },
     status: {
         type: String,
         enum: ["valid", "expired", "pending"],
@@ -13,7 +18,6 @@ const serviceSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ["category1", "category2", "category3"],
         required: true
     }
 

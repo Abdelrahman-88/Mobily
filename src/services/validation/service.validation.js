@@ -10,7 +10,12 @@ module.exports = {
             price: Joi.number().required(),
             desc: Joi.string().required(),
             status: Joi.string().valid("valid", "expired", "pending").required(),
-            category: Joi.string().valid("category1", "category2", "category3").required()
+            category: Joi.string().required(),
+            internet: Joi.string().allow(''),
+            localM: Joi.string().allow(''),
+            groupM: Joi.string().allow(''),
+            noSms: Joi.string().allow(''),
+            ofSms: Joi.string().allow('')
         })
     },
     getAllServicesSchems: {
@@ -18,7 +23,12 @@ module.exports = {
             page: Joi.string().allow(''),
             size: Joi.string().allow(''),
             search: Joi.string().allow(''),
-            category: Joi.string().valid("category1", "category2", "category3").allow('')
+            category: Joi.string().allow(''),
+            internet: Joi.string().allow(''),
+            localM: Joi.string().allow(''),
+            groupM: Joi.string().allow(''),
+            noSms: Joi.string().allow(''),
+            ofSms: Joi.string().allow('')
         })
     },
     updateServiceSchema: {
@@ -30,7 +40,12 @@ module.exports = {
             price: Joi.number().required(),
             desc: Joi.string().required(),
             status: Joi.string().valid("valid", "expired", "pending").required(),
-            category: Joi.string().valid("category1", "category2", "category3").required()
+            category: Joi.string().required(),
+            internet: Joi.string().allow(''),
+            localM: Joi.string().allow(''),
+            groupM: Joi.string().allow(''),
+            noSms: Joi.string().allow(''),
+            ofSms: Joi.string().allow('')
         })
     },
     getServiceByIdSchema: {

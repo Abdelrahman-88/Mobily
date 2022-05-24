@@ -7,9 +7,9 @@ const searchServies = require("../../../common/service/search")
 const addService = async(req, res) => {
     try {
         const { createdBy } = req.params
-        const { name, price, desc, status, category } = req.body
+        const {...rest } = req.body
         if (req.user._id = createdBy) {
-            const newService = new Service({ createdBy, name, price, desc, status, category })
+            const newService = new Service({ createdBy, ...rest })
             const data = await newService.save()
             res.status(StatusCodes.CREATED).json({ message: "Service added successfully", data });
         } else {
@@ -38,8 +38,8 @@ const getAllServices = async(req, res) => {
 const updateService = async(req, res) => {
     try {
         const { serviceId } = req.params
-        const { name, price, desc, status, category } = req.body
-        const service = await Service.findOneAndUpdate({ _id: serviceId }, { name, price, desc, status, category })
+        const {...rest } = req.body
+        const service = await Service.findOneAndUpdate({ _id: serviceId }, {...rest })
         if (service) {
             res.status(StatusCodes.OK).json({ message: "Service updated successfully" });
         } else {

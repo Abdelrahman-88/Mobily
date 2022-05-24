@@ -3,7 +3,7 @@ const documentRouter = require('../../src/documents/routes/document.routes');
 const adminRouter = require('../../src/admins/routes/admin.routes');
 const serviceRouter = require('../../src/services/routes/service.routes');
 const orderRouter = require('../../src/orders/routes/order.routes');
-
+const cartRouter = require('../../src/cart/routes/cart.routes');
 
 
 
@@ -12,5 +12,6 @@ module.exports = {
     documentRouter,
     adminRouter,
     serviceRouter,
-    orderRouter
+    orderRouter,
+    cartRouter
 }
