@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const cartSchema = require("../schema/cart.schema")
 
-const Cart = mongoose.model("document", cartSchema)
+const Cart = mongoose.model("cart", cartSchema)
 
 
 

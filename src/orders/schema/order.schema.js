@@ -3,7 +3,7 @@ const { Schema } = require("mongoose")
 
 const orderSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: "user" },
-    serviceId: { type: Schema.Types.ObjectId, ref: "service" },
+    cartId: { type: Schema.Types.ObjectId, ref: "cart" },
     actionBy: { type: Schema.Types.String, ref: "admin" },
     action: { type: Boolean, default: false },
     status: {

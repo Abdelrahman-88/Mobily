@@ -18,6 +18,10 @@ const serviceSchema = new Schema({
     },
     category: {
         type: String,
+        enum: ["bPostpaid", "dPostpaid", "dPrepaid", "bulkSmsB", "businessAdd",
+            "roamingAdd", "fiberNet", "iServices", "advVoiceServices", "localConnect", "advancedConnect",
+            "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions"
+        ],
         required: true
     }
 

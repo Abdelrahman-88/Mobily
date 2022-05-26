@@ -6,9 +6,10 @@ const cartSchema = new Schema({
     services: [{
         serviceId: { type: Schema.Types.ObjectId, ref: "service" },
         quantity: { type: Number, required: true },
-        total: { type: Number, required: true }
+        total: { type: Number },
+        _id: false
     }],
-    totalPrice: { type: Number, required: true }
+    totalPrice: { type: Number }
 
 }, { timestamps: true })
 

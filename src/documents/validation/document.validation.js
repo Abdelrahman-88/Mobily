@@ -37,7 +37,9 @@ module.exports = {
             status: Joi.string().valid('closed', 'pending').required(),
             comment: Joi.string().required(),
             phone: Joi.string().required(),
-            contactEmail: Joi.string().email().required()
+            contactEmail: Joi.string().email().required(),
+            commercialR: Joi.string().required(),
+            iD: Joi.string().required()
         })
     },
     getUserDocumentsSchema: {
