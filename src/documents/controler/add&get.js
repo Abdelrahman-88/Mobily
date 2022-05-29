@@ -171,7 +171,8 @@ const checkDocument = async(req, res) => {
         const { createdBy } = req.params
         if (req.user._id == createdBy) {
             const document = await Document.findOne({ createdBy, status: { $ne: "closed" } })
-            const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = req.user._doc
+            const newData = await User.findOne({ _id: createdBy }).populate("documentId");
+            const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = newData._doc
             const token = jwt.sign({...rest }, process.env.SECRET_KEY)
             if (document) {
                 res.status(StatusCodes.OK).json({ message: "Done", document, documentValidity: req.user.documentValidity, token });
