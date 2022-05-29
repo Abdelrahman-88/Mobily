@@ -5,6 +5,7 @@ const { conn } = require("../../../common/connection/confg");
 const mongoose = require('mongoose');
 const pageService = require("../../../common/service/page");
 const searchServies = require("../../../common/service/search")
+const jwt = require('jsonwebtoken');
 
 let gfs
 conn.once("open", () => {
@@ -170,10 +171,12 @@ const checkDocument = async(req, res) => {
         const { createdBy } = req.params
         if (req.user._id == createdBy) {
             const document = await Document.findOne({ createdBy, status: { $ne: "closed" } })
+            const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = req.user._doc
+            const token = jwt.sign({...rest }, process.env.SECRET_KEY)
             if (document) {
-                res.status(StatusCodes.OK).json({ message: "Done", document, documentValidity: req.user.documentValidity });
+                res.status(StatusCodes.OK).json({ message: "Done", document, documentValidity: req.user.documentValidity, token });
             } else {
-                res.status(StatusCodes.OK).json({ message: "No open documents found", documentValidity: req.user.documentValidity });
+                res.status(StatusCodes.OK).json({ message: "No open documents found", documentValidity: req.user.documentValidity, token });
             }
         } else {
             res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
