@@ -31,7 +31,7 @@ const adminLogOut = async(req, res) => {
     try {
         const { id } = req.params
         if (id == req.user._id) {
-            const data = await Admin.findOneAndUpdate({ _id: id, logedIn: true }, { logedIn: false }, { new: true });
+            const data = await Admin.findOneAndUpdate({ _id: id }, { logedIn: false }, { new: true });
             if (data) {
                 res.status(StatusCodes.OK).json({ message: "Logout successfully" });
             } else {
