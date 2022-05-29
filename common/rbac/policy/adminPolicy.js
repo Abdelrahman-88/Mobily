@@ -15,12 +15,13 @@ const {
 } = require("../../../src/orders/endPoints");
 const {
     ADD_SERVICE,
-    UPDATE_SERVICE
+    UPDATE_SERVICE,
+    GET_ALL_SERVICES_ADMIN
 } = require("../../../src/services/endPoints");
 const {
     USER_EXPIRE_DOCMENT
 } = require("../../../src/users/endPoint");
 
 module.exports = [ADD_ADMIN, GET_ALL_DOCUMENT, GET_DOCUMENT, VALIDATE_DOCUMENT, USER_EXPIRE_DOCMENT, ADD_SERVICE, UPDATE_SERVICE,
-    ADMIN_LOG_OUT, REMOVE_DOCUMENT_ACTION
+    ADMIN_LOG_OUT, REMOVE_DOCUMENT_ACTION, GET_ALL_SERVICES_ADMIN
 ]

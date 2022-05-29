@@ -11,6 +11,7 @@ const serviceSchema = new Schema({
     groupM: { type: String },
     noSms: { type: String },
     ofSms: { type: String },
+    validity: { type: Number },
     status: {
         type: String,
         enum: ["valid", "expired", "pending"],

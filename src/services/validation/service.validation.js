@@ -17,7 +17,8 @@ module.exports = {
             localM: Joi.string().allow(''),
             groupM: Joi.string().allow(''),
             noSms: Joi.string().allow(''),
-            ofSms: Joi.string().allow('')
+            ofSms: Joi.string().allow(''),
+            validity: Joi.number().allow('', null)
         })
     },
     getAllServicesSchems: {
@@ -27,12 +28,18 @@ module.exports = {
             search: Joi.string().allow(''),
             category: Joi.string().valid("bPostpaid", "dPostpaid", "dPrepaid", "bulkSmsB", "businessAdd",
                 "roamingAdd", "fiberNet", "iServices", "advVoiceServices", "localConnect", "advancedConnect",
+                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions").allow('')
+        })
+    },
+    getAllServicesAdminSchems: {
+        query: Joi.object().required().keys({
+            page: Joi.string().allow(''),
+            size: Joi.string().allow(''),
+            search: Joi.string().allow(''),
+            category: Joi.string().valid("bPostpaid", "dPostpaid", "dPrepaid", "bulkSmsB", "businessAdd",
+                "roamingAdd", "fiberNet", "iServices", "advVoiceServices", "localConnect", "advancedConnect",
                 "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions").allow(''),
-            internet: Joi.string().allow(''),
-            localM: Joi.string().allow(''),
-            groupM: Joi.string().allow(''),
-            noSms: Joi.string().allow(''),
-            ofSms: Joi.string().allow('')
+            status: Joi.string().valid("valid", "expired", "pending").allow('')
         })
     },
     updateServiceSchema: {
@@ -51,7 +58,8 @@ module.exports = {
             localM: Joi.string().allow(''),
             groupM: Joi.string().allow(''),
             noSms: Joi.string().allow(''),
-            ofSms: Joi.string().allow('')
+            ofSms: Joi.string().allow(''),
+            validity: Joi.number().allow('', null)
         })
     },
     getServiceByIdSchema: {

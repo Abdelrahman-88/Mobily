@@ -35,6 +35,22 @@ const getAllServices = async(req, res) => {
     }
 }
 
+
+const getAllServicesAdmin = async(req, res) => {
+    try {
+        let { page, size, search, category, status } = req.query
+        const { skip, limit, currentPage } = pageService(page, size)
+        const servies = await searchServies(search, { status, category }, limit, skip, Service, ["name"], "", "")
+        if (servies.data.length) {
+            res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: servies.totalPages, total: servies.total, data: servies.data });
+        } else {
+            res.status(StatusCodes.BAD_REQUEST).json({ message: "No services found" });
+        }
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get all services" });
+    }
+}
+
 const updateService = async(req, res) => {
     try {
         const { serviceId } = req.params
@@ -70,5 +86,6 @@ module.exports = {
     addService,
     getAllServices,
     updateService,
-    getServiceById
+    getServiceById,
+    getAllServicesAdmin
 }
