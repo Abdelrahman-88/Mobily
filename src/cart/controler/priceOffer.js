@@ -3,7 +3,7 @@ const Order = require("../../orders/model/order.model");
 const Service = require("../../services/model/service.model");
 const Cart = require("../model/cart.model");
 
-const addCart = async(req, res) => {
+const addPriceOffer = async(req, res) => {
     try {
         const { createdBy } = req.params;
         let services = req.body;
@@ -21,19 +21,19 @@ const addCart = async(req, res) => {
                 }
             });
             await Promise.all(promises);
-            const newCart = new Cart({ createdBy, services: newServices, totalPrice });
-            const cart = await newCart.save();
-            const newOrder = new Order({ createdBy, cartId: cart._id });
+            const newOffer = new Cart({ createdBy, services: newServices, totalPrice, priceOffer: true });
+            const offer = await newOffer.save();
+            const newOrder = new Order({ createdBy, cartId: offer._id });
             const order = await newOrder.save();
-            res.status(StatusCodes.CREATED).json({ message: "Cart added successfully" });
+            res.status(StatusCodes.CREATED).json({ message: "Price offer sent successfully", offer, order });
         } else {
             res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
         }
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to add cart" });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to send price offer" });
     }
 }
 
 
 
-module.exports = { addCart }
+module.exports = { addPriceOffer }

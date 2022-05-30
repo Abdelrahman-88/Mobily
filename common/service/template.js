@@ -22,10 +22,19 @@ const forgetTemplate = (key) => {
 </div>`
 }
 
+const verificationCartTemplate = (key) => {
+    return `<div style="text-align: center;">
+    <h1>Verify Your Email</h1>
+    <p>Please verify your email to submit your cart</p>
+    <p>Your verification key: ${key}</p>
+</div>`
+}
+
 
 
 module.exports = {
     verificationTemplate,
     updateTemplate,
-    forgetTemplate
+    forgetTemplate,
+    verificationCartTemplate
 }

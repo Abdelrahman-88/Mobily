@@ -1,5 +1,11 @@
 const ADD_CART = "user:ADD_CART"
+const PRICE_OFFER = "user:PRICE_OFFER"
+const SEND_VERIFICATION_KEY = "user:SEND_VERIFICATION_KEY"
+const VERIFY_CART = "user:VERIFY_CART"
 
 module.exports = {
-    ADD_CART
+    ADD_CART,
+    PRICE_OFFER,
+    SEND_VERIFICATION_KEY,
+    VERIFY_CART
 }

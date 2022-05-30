@@ -9,7 +9,8 @@ const cartSchema = new Schema({
         total: { type: Number },
         _id: false
     }],
-    totalPrice: { type: Number }
+    totalPrice: { type: Number },
+    priceOffer: { type: Boolean, default: false }
 
 }, { timestamps: true })
 
