@@ -61,7 +61,6 @@ const getUserOrders = async(req, res) => {
             res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
         }
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get orders" });
     }
 }

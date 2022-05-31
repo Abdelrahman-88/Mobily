@@ -1,4 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
+const FollowUp = require("../../followUp/model/followUp.model");
 const User = require("../../users/model/user.model");
 const Document = require("../model/document.model");
 
@@ -25,6 +26,7 @@ const updateDocument = async(req, res) => {
                                     })
                                 }
                                 const updatedDocument = await Document.findOneAndUpdate({ _id: documentId }, { documents: filesUrl, status: "open" }, { new: true })
+                                const followUp = await FollowUp.findOneAndUpdate({ requestId: documentId }, { status: "closed" })
                                 res.status(StatusCodes.CREATED).json({ message: "Documents updated successfully", data: updatedDocument });
                             } else {
                                 res.status(StatusCodes.BAD_REQUEST).json({ message: "Documents is required" });

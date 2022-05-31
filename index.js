@@ -8,7 +8,8 @@ const {
     adminRouter,
     serviceRouter,
     orderRouter,
-    cartRouter
+    cartRouter,
+    followUPRouter
 } = require('./common/router/allRoutes')
 const runJob = require('./common/jobs')
 
@@ -16,12 +17,11 @@ const runJob = require('./common/jobs')
 const app = express()
 const port = process.env.PORT || 5000
 app.use(express.json())
-    // app.use("/uploads", express.static("uploads"))
 
 app.use(cors())
 
 app.get('/', (req, res) => res.send('welcome'))
-app.use(userRouter, documentRouter, adminRouter, serviceRouter, orderRouter, cartRouter)
+app.use(userRouter, documentRouter, adminRouter, serviceRouter, orderRouter, cartRouter, followUPRouter)
 dbConnection()
 
 runJob()

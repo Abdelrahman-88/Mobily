@@ -1,4 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
+const FollowUp = require("../../followUp/model/followUp.model");
 const User = require("../../users/model/user.model");
 const Document = require("../model/document.model");
 
@@ -24,6 +25,10 @@ const validateDocument = async(req, res) => {
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                     } else {
                         const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: "" })
+                        if (status == "pending") {
+                            const followUp = new FollowUp({ userId: document.createdBy, requestId: documentId })
+                            const saved = await followUp.save()
+                        }
                         res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                     }
                 } else {

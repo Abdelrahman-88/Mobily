@@ -1,4 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
+const FollowUp = require("../../followUp/model/followUp.model");
 const Order = require("../model/order.model");
 
 const validateOrder = async(req, res) => {
@@ -7,17 +8,25 @@ const validateOrder = async(req, res) => {
         const { status, activated, comment, ban } = req.body
         const now = new Date().toISOString()
         const validOrder = await Order.findOne({ _id: orderId })
-        if (validOrder.status == "closed") {
-            res.status(StatusCodes.BAD_REQUEST).json({ message: "Order already closed" });
-        } else {
-            const { employeeId } = req.user._doc
-            const activity = [{ employeeId, comment, date: now }, ...validOrder.activity]
-            const order = await Order.findOneAndUpdate({ _id: orderId }, { status, activated, comment, seen: false, ban, activity, action: false, actionBy: "" })
-            if (order) {
-                res.status(StatusCodes.OK).json({ message: "Order validated successfully" });
+        if (validOrder) {
+            if (validOrder.status == "closed") {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "Order already closed" });
             } else {
-                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Invalid order" });
+                const { employeeId } = req.user._doc
+                const activity = [{ employeeId, comment, date: now }, ...validOrder.activity]
+                const order = await Order.findOneAndUpdate({ _id: orderId }, { status, activated, comment, seen: false, ban, activity, action: false, actionBy: "" })
+                if (order) {
+                    if (status == "pending") {
+                        const followUp = new FollowUp({ userId: order.createdBy, requestId: orderId })
+                        const saved = await followUp.save()
+                    }
+                    res.status(StatusCodes.OK).json({ message: "Order validated successfully" });
+                } else {
+                    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Invalid order" });
+                }
             }
+        } else {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Invalid order" });
         }
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to validate order" });
