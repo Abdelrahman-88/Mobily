@@ -19,7 +19,8 @@ const {
     getSeenDocumentsSchema,
     updateSeenDocumentsSchema,
     removeDocumentActionSchema,
-    checkDocumentSchema
+    checkDocumentSchema,
+    updateDocumentSchema
 } = require("../validation/document.validation");
 const {
     UPLOAD_FILE,
@@ -30,7 +31,8 @@ const {
     GET_SEEN_DOCUMENTS,
     UPDATE_SEEN_DOCUMENTS,
     REMOVE_DOCUMENT_ACTION,
-    CHECK_DOCUMENT
+    CHECK_DOCUMENT,
+    UPDATE_FILE
 } = require("../endPoints");
 const {
     validateDocument,
@@ -38,6 +40,7 @@ const {
     removeDocumentAction
 } = require("../controler/validate");
 const { getSeenDocuments, updateSeenDocuments } = require("../controler/seen");
+const { updateDocument } = require("../controler/update");
 
 const router = require("express").Router();
 
@@ -48,7 +51,15 @@ router.post("/addDocument/:createdBy", upload.fields([
     { name: 'valueC', maxCount: 1 },
     { name: 'iD', maxCount: 1 },
     { name: 'insuranceC', maxCount: 1 },
-]), validation(addDocumentSchema), isAuthorized(UPLOAD_FILE), addDocument)
+]), validation(addDocumentSchema), isAuthorized(UPLOAD_FILE), addDocument);
+
+router.post("/updateDocument/:id/:documentId", upload.fields([
+    { name: 'authorization', maxCount: 1 },
+    { name: 'commercialR', maxCount: 1 },
+    { name: 'valueC', maxCount: 1 },
+    { name: 'iD', maxCount: 1 },
+    { name: 'insuranceC', maxCount: 1 },
+]), validation(updateDocumentSchema), isAuthorized(UPDATE_FILE), updateDocument);
 
 router.get("/getDocument/:documentId", validation(getDocumentSchema), isAuthorized(GET_DOCUMENT), getDocument);
 

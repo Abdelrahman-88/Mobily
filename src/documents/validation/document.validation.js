@@ -6,6 +6,12 @@ module.exports = {
             createdBy: Joi.string().required().min(24).max(24)
         })
     },
+    updateDocumentSchema: {
+        params: Joi.object().required().keys({
+            id: Joi.string().required().min(24).max(24),
+            documentId: Joi.string().required().min(24).max(24)
+        })
+    },
     getDocumentSchema: {
         params: Joi.object().required().keys({
             documentId: Joi.string().required().min(24).max(24)
