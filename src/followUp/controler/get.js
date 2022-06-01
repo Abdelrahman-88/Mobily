@@ -6,13 +6,13 @@ const FollowUp = require("../model/followUp.model");
 const getFollowUpById = async(req, res) => {
     try {
         const { followUpId } = req.params
-        const followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")
+        const followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document").populate("actionBy", "employeeId")
         if (followUp) {
             if (followUp.action) {
-                if (req.user._id.equals(followUp.actionBy)) {
+                if (req.user._id.equals(followUp.actionBy._id)) {
                     res.status(StatusCodes.OK).json({ message: "done", data: followUp });
                 } else {
-                    res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                    res.status(StatusCodes.UNAUTHORIZED).json({ message: `Request opend by employee Id ${followUp.actionBy.employeeId}` });
                 }
             } else {
                 const action = await FollowUp.findOneAndUpdate({ _id: followUpId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("userId", "-password -verificationKey").populate("actionBy", "employeeId").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")

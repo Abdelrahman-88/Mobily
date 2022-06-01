@@ -6,17 +6,17 @@ const searchServies = require("../../../common/service/search")
 const getOrderById = async(req, res) => {
     try {
         const { orderId } = req.params
-        const order = await Order.findOne({ _id: orderId }).populate("createdBy", "-password -verificationKey").populate({ path: "cartId", populate: { path: "services.serviceId" } })
+        const order = await Order.findOne({ _id: orderId }).populate("createdBy", "-password -verificationKey").populate({ path: "cartId", populate: { path: "services.serviceId" } }).populate("actionBy", "employeeId")
         if (order) {
             if (req.user._id.equals(order.createdBy._id)) {
                 const seen = await Order.findOneAndUpdate({ _id: orderId }, { seen: true }, { new: true }).populate("createdBy", "-password -verificationKey").populate({ path: "cartId", populate: { path: "services.serviceId" } })
                 res.status(StatusCodes.OK).json({ message: "Done", data: seen });
             } else if (req.user.role == "operator") {
                 if (order.action) {
-                    if (req.user._id.equals(order.actionBy)) {
+                    if (req.user._id.equals(order.actionBy._id)) {
                         res.status(StatusCodes.OK).json({ message: "done", data: order });
                     } else {
-                        res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                        res.status(StatusCodes.UNAUTHORIZED).json({ message: `Request opend by employee Id ${order.actionBy.employeeId}` });
                     }
                 } else {
                     const action = await Order.findOneAndUpdate({ _id: orderId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("createdBy", "-password -verificationKey").populate("actionBy", "employeeId").populate({ path: "cartId", populate: { path: "services.serviceId" } })

@@ -63,7 +63,7 @@ const addDocument = async(req, res) => {
 const getDocument = async(req, res) => {
     try {
         const { documentId } = req.params
-        const document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey')
+        const document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
         if (document) {
             let { _id } = document.createdBy
             if (req.user._id.equals(_id)) {
@@ -71,10 +71,10 @@ const getDocument = async(req, res) => {
                 res.status(StatusCodes.OK).json({ message: "done", document: seen });
             } else if (req.user.role == "admin" || req.user.role == "operator") {
                 if (document.action) {
-                    if (req.user._id.equals(document.actionBy)) {
+                    if (req.user._id.equals(document.actionBy._id)) {
                         res.status(StatusCodes.OK).json({ message: "done", document });
                     } else {
-                        res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                        res.status(StatusCodes.UNAUTHORIZED).json({ message: `Request opend by employee Id ${document.actionBy.employeeId}` });
                     }
                 } else {
                     const action = await Document.findOneAndUpdate({ _id: documentId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
@@ -91,6 +91,7 @@ const getDocument = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid document" });
         }
     } catch (error) {
+        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get document" });
     }
 }
