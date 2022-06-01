@@ -36,24 +36,16 @@ const getFollowUpById = async(req, res) => {
 const getAllFollowUp = async(req, res) => {
     try {
         let { page, size, ...value } = req.query
-        Object.keys(value).forEach(key => {
-            if (value[key] === '' || value[key] === undefined || value[key] === null) {
-                delete value[key];
-            }
-        });
         const yesterday = new Date(new Date(new Date().setHours(0, 0, 0, 0)).setDate(new Date().getDate() - 2)).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)
-            // const followUp = await searchServies("", { status, answered, action, createdAt: { $lte: yesterday } }, limit, skip, FollowUp, [], "", "")
-        const followUp = await FollowUp.find({...value }).skip(skip).limit(parseInt(limit))
-        const total = await FollowUp.find({...value }).count()
-        const totalPages = Math.ceil(total / limit)
-        if (followUp.length) {
-            res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages, total, data: followUp });
+        const followUp = await searchServies("", {...value, createdAt: { $lte: yesterday } }, limit, skip, FollowUp, [], "", "")
+        if (followUp.data.length) {
+            res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: followUp.totalPages, total: followUp.total, data: followUp.data });
+
         } else {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "No followup found" });
         }
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get followup" });
     }
 }

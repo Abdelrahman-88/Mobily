@@ -33,6 +33,7 @@ const addDocument = async(req, res) => {
                                 let filesUrl = [];
                                 for (let key of Object.keys(req.files)) {
                                     filesUrl.push({
+                                        field: req.files[key][0].fieldname,
                                         name: req.files[key][0].filename,
                                         url: process.env.URL + 'displayDocument/' + req.files[key][0].filename
                                     })

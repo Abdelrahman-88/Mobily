@@ -11,13 +11,17 @@ const validateFollowUp = async(req, res) => {
             if (validFollowUp.status == "closed") {
                 res.status(StatusCodes.BAD_REQUEST).json({ message: "Followup already closed" });
             } else {
-                const { employeeId } = req.user._doc
-                const activity = [{ employeeId, comment, date: now }, ...validFollowUp.activity]
-                const followUp = await FollowUp.findOneAndUpdate({ _id: followUpId }, { status, answered, comment, seen: false, activity, action: false, actionBy: "" })
-                if (followUp) {
-                    res.status(StatusCodes.OK).json({ message: "Followup validated successfully" });
+                if (req.user._id.equals(validFollowUp.actionBy)) {
+                    const { employeeId } = req.user._doc
+                    const activity = [{ employeeId, comment, date: now }, ...validFollowUp.activity]
+                    const followUp = await FollowUp.findOneAndUpdate({ _id: followUpId }, { status, answered, comment, seen: false, activity, action: false, actionBy: "" })
+                    if (followUp) {
+                        res.status(StatusCodes.OK).json({ message: "Followup validated successfully" });
+                    } else {
+                        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Invalid followup" });
+                    }
                 } else {
-                    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Invalid followup" });
+                    res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
                 }
             }
         } else {

@@ -16,8 +16,11 @@ const followUpSchema = new Schema({
     answered: { type: Boolean, required: true, default: false }
 
 }, {
-    toJSON: { virtuals: true }
-}, { timestamps: true })
+    id: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    timestamps: true
+})
 
 followUpSchema.virtual('order', {
     ref: 'order',
