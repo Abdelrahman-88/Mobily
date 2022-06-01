@@ -39,7 +39,7 @@ const updateDocument = async(req, res) => {
                                             oldFiles.splice(i, 1)
                                         }
                                     })
-                                    newFiles.splice(i, 1)
+                                    filesUrl.splice(i, 1)
                                 })
                                 const updatedDocument = await Document.findOneAndUpdate({ _id: documentId }, { documents: newFiles, status: "open" }, { new: true })
                                 const followUp = await FollowUp.findOneAndUpdate({ requestId: documentId }, { status: "closed" })
