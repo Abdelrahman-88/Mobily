@@ -37,7 +37,6 @@ const register = async(req, res) => {
                 } else {
                     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
                 }
-
             } else {
                 res.status(StatusCodes.BAD_REQUEST).json({ message: "Password doesnot match cPassword" });
             }

@@ -70,11 +70,19 @@ const getDocument = async(req, res) => {
                 const seen = await Document.findOneAndUpdate({ _id: documentId }, { seen: true }, { new: true }).populate('createdBy', '-password -verificationKey')
                 res.status(StatusCodes.OK).json({ message: "done", document: seen });
             } else if (req.user.role == "admin" || req.user.role == "operator") {
-                const action = await Document.findOneAndUpdate({ _id: documentId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
-                if (action) {
-                    res.status(StatusCodes.OK).json({ message: "done", document: action });
+                if (document.action) {
+                    if (req.user._id.equals(document.actionBy)) {
+                        res.status(StatusCodes.OK).json({ message: "done", document });
+                    } else {
+                        res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                    }
                 } else {
-                    res.status(StatusCodes.OK).json({ message: "done", document });
+                    const action = await Document.findOneAndUpdate({ _id: documentId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
+                    if (action) {
+                        res.status(StatusCodes.OK).json({ message: "done", document: action });
+                    } else {
+                        res.status(StatusCodes.OK).json({ message: "done", document });
+                    }
                 }
             } else {
                 res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
@@ -123,7 +131,7 @@ const displayDocument = async(req, res) => {
 const getAllDocuments = async(req, res) => {
     try {
 
-        let { page, size, from, to, status, valid, action } = req.query
+        let { page, size, from, to, status, valid, action, actionBy } = req.query
         if (!from) {
             from = new Date('2022')
         }
@@ -134,7 +142,7 @@ const getAllDocuments = async(req, res) => {
         from = new Date(from).toISOString()
         to = new Date(to).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)
-        const documents = await searchServies("", { status, valid, action }, limit, skip, Document, [], "createdBy", "-password -verificationKey")
+        const documents = await searchServies("", { status, valid, action, actionBy }, limit, skip, Document, [], "createdBy", "-password -verificationKey")
         if (documents.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: documents.totalPages, total: documents.total, data: documents.data });
         } else {

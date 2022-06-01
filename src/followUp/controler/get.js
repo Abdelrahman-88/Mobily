@@ -8,11 +8,19 @@ const getFollowUpById = async(req, res) => {
         const { followUpId } = req.params
         const followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")
         if (followUp) {
-            const action = await FollowUp.findOneAndUpdate({ _id: followUpId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("userId", "-password -verificationKey").populate("actionBy", "employeeId").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")
-            if (action) {
-                res.status(StatusCodes.OK).json({ message: "done", data: action });
+            if (followUp.action) {
+                if (req.user._id.equals(followUp.actionBy)) {
+                    res.status(StatusCodes.OK).json({ message: "done", data: followUp });
+                } else {
+                    res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                }
             } else {
-                res.status(StatusCodes.OK).json({ message: "done", data: followUp });
+                const action = await FollowUp.findOneAndUpdate({ _id: followUpId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("userId", "-password -verificationKey").populate("actionBy", "employeeId").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")
+                if (action) {
+                    res.status(StatusCodes.OK).json({ message: "done", data: action });
+                } else {
+                    res.status(StatusCodes.OK).json({ message: "done", data: followUp });
+                }
             }
         } else {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid followup" });

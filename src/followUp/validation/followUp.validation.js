@@ -29,7 +29,8 @@ module.exports = {
             size: Joi.string().allow(''),
             status: Joi.string().valid("open", "closed", "pending").allow(''),
             answered: Joi.boolean().allow(''),
-            action: Joi.boolean().allow('')
+            action: Joi.boolean().allow(''),
+            actionBy: Joi.string().min(24).max(24).allow('')
         })
     }
 }

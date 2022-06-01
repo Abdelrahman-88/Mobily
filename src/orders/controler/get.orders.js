@@ -12,11 +12,19 @@ const getOrderById = async(req, res) => {
                 const seen = await Order.findOneAndUpdate({ _id: orderId }, { seen: true }, { new: true }).populate("createdBy", "-password -verificationKey").populate({ path: "cartId", populate: { path: "services.serviceId" } })
                 res.status(StatusCodes.OK).json({ message: "Done", data: seen });
             } else if (req.user.role == "operator") {
-                const action = await Order.findOneAndUpdate({ _id: orderId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("createdBy", "-password -verificationKey").populate("actionBy", "employeeId").populate({ path: "cartId", populate: { path: "services.serviceId" } })
-                if (action) {
-                    res.status(StatusCodes.OK).json({ message: "done", data: action });
+                if (order.action) {
+                    if (req.user._id.equals(order.actionBy)) {
+                        res.status(StatusCodes.OK).json({ message: "done", data: order });
+                    } else {
+                        res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                    }
                 } else {
-                    res.status(StatusCodes.OK).json({ message: "done", data: order });
+                    const action = await Order.findOneAndUpdate({ _id: orderId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("createdBy", "-password -verificationKey").populate("actionBy", "employeeId").populate({ path: "cartId", populate: { path: "services.serviceId" } })
+                    if (action) {
+                        res.status(StatusCodes.OK).json({ message: "done", data: action });
+                    } else {
+                        res.status(StatusCodes.OK).json({ message: "done", data: order });
+                    }
                 }
             } else {
                 res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
@@ -32,9 +40,9 @@ const getOrderById = async(req, res) => {
 
 const getAllOrders = async(req, res) => {
     try {
-        let { page, size, status, activated, action } = req.query
+        let { page, size, status, activated, action, actionBy } = req.query
         const { skip, limit, currentPage } = pageService(page, size)
-        const orders = await searchServies("", { status, activated, action }, limit, skip, Order, [], "cartId", "")
+        const orders = await searchServies("", { status, activated, action, actionBy }, limit, skip, Order, [], "cartId", "")
         if (orders.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
         } else {
