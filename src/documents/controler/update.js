@@ -28,18 +28,24 @@ const updateDocument = async(req, res) => {
                                 }
                                 let newFiles = [];
                                 const oldFiles = document.documents
-                                filesUrl.forEach((file, i) => {
-                                    oldFiles.forEach((old, i) => {
+                                filesUrl.forEach((file) => {
+                                    oldFiles.forEach((old) => {
                                         if (file.field == old.field) {
-                                            newFiles.push(file)
-                                            oldFiles.splice(i, 1)
+                                            const index = newFiles.findIndex(object => object.field === file.field);
+                                            if (index === -1) {
+                                                newFiles.push(file)
+                                            }
                                         } else {
-                                            newFiles.push(old)
-                                            newFiles.push(file)
-                                            oldFiles.splice(i, 1)
+                                            const index = newFiles.findIndex(object => object.field === file.field);
+                                            if (index === -1) {
+                                                newFiles.push(file)
+                                            }
+                                            const index1 = newFiles.findIndex(object => object.field === old.field);
+                                            if (index1 === -1) {
+                                                newFiles.push(old)
+                                            }
                                         }
                                     })
-                                    filesUrl.splice(i, 1)
                                 })
                                 const updatedDocument = await Document.findOneAndUpdate({ _id: documentId }, { documents: newFiles, status: "open" }, { new: true })
                                 const followUp = await FollowUp.findOneAndUpdate({ requestId: documentId }, { status: "closed" })
