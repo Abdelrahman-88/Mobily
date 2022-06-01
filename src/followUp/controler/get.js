@@ -6,9 +6,10 @@ const FollowUp = require("../model/followUp.model");
 const getFollowUpById = async(req, res) => {
     try {
         const { followUpId } = req.params
-        const followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document").populate("actionBy", "employeeId")
+        let followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")
         if (followUp) {
             if (followUp.action) {
+                followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document").populate("actionBy", "employeeId")
                 if (req.user._id.equals(followUp.actionBy._id)) {
                     res.status(StatusCodes.OK).json({ message: "done", data: followUp });
                 } else {

@@ -63,7 +63,7 @@ const addDocument = async(req, res) => {
 const getDocument = async(req, res) => {
     try {
         const { documentId } = req.params
-        const document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
+        let document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey')
         if (document) {
             let { _id } = document.createdBy
             if (req.user._id.equals(_id)) {
@@ -71,6 +71,7 @@ const getDocument = async(req, res) => {
                 res.status(StatusCodes.OK).json({ message: "done", document: seen });
             } else if (req.user.role == "admin" || req.user.role == "operator") {
                 if (document.action) {
+                    document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
                     if (req.user._id.equals(document.actionBy._id)) {
                         res.status(StatusCodes.OK).json({ message: "done", document });
                     } else {
