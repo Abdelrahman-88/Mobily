@@ -32,6 +32,7 @@ const updateDocument = async(req, res) => {
                                     oldFiles.forEach((old, i) => {
                                         if (file.field == old.field) {
                                             newFiles.push(file)
+                                            oldFiles.splice(i, 1)
                                         } else {
                                             newFiles.push(old)
                                             newFiles.push(file)
