@@ -8,7 +8,7 @@ const followUpSchema = new Schema({
     action: { type: Boolean, default: false },
     status: {
         type: String,
-        enum: ["open", "closed", "pending"],
+        enum: ["open", "closed", "pending", "notClosed"],
         required: true,
         default: "open"
     },
