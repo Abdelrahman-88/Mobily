@@ -22,13 +22,6 @@ const followUpSchema = new Schema({
     timestamps: true
 })
 
-followUpSchema.virtual('order', {
-    ref: 'order',
-    localField: 'requestId',
-    foreignField: '_id',
-    justOne: true
-});
-
 followUpSchema.virtual('document', {
     ref: 'document',
     localField: 'requestId',

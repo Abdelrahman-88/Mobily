@@ -6,17 +6,17 @@ const FollowUp = require("../model/followUp.model");
 const getFollowUpById = async(req, res) => {
     try {
         const { followUpId } = req.params
-        let followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")
+        let followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate("document")
         if (followUp) {
             if (followUp.action) {
-                followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document").populate("actionBy", "employeeId")
+                followUp = await FollowUp.findOne({ _id: followUpId }).populate("userId", "-password -verificationKey").populate("document").populate("actionBy", "employeeId")
                 if (req.user._id.equals(followUp.actionBy._id)) {
                     res.status(StatusCodes.OK).json({ message: "done", data: followUp });
                 } else {
                     res.status(StatusCodes.UNAUTHORIZED).json({ message: `Request opend by employee Id ${followUp.actionBy.employeeId}` });
                 }
             } else {
-                const action = await FollowUp.findOneAndUpdate({ _id: followUpId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("userId", "-password -verificationKey").populate("actionBy", "employeeId").populate({ path: "order", populate: { path: "cartId", populate: { path: "services.serviceId" } } }).populate("document")
+                const action = await FollowUp.findOneAndUpdate({ _id: followUpId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate("userId", "-password -verificationKey").populate("actionBy", "employeeId").populate("document")
                 if (action) {
                     res.status(StatusCodes.OK).json({ message: "done", data: action });
                 } else {
@@ -27,7 +27,6 @@ const getFollowUpById = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid followup" });
         }
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get followup" });
     }
 }

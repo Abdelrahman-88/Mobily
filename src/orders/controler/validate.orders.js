@@ -17,10 +17,6 @@ const validateOrder = async(req, res) => {
                     const activity = [{ employeeId, comment, date: now }, ...validOrder.activity]
                     const order = await Order.findOneAndUpdate({ _id: orderId }, { status, activated, comment, seen: false, ban, activity, action: false, actionBy: "" })
                     if (order) {
-                        if (status == "pending") {
-                            const followUp = new FollowUp({ userId: order.createdBy, requestId: orderId })
-                            const saved = await followUp.save()
-                        }
                         res.status(StatusCodes.OK).json({ message: "Order validated successfully" });
                     } else {
                         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Invalid order" });
