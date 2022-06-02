@@ -12,7 +12,8 @@ module.exports = {
             email: Joi.string().required().email(),
             password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required(),
             cPassword: Joi.ref('password'),
-            salesId: Joi.number().allow(null, '')
+            salesId: Joi.number().allow(null, ''),
+            mapLocation: Joi.string().required()
         })
     },
     verifyEmailSchema: {
@@ -40,7 +41,8 @@ module.exports = {
             name: Joi.string().required(),
             companyName: Joi.string().required(),
             city: Joi.string().required(),
-            position: Joi.string().required()
+            position: Joi.string().required(),
+            mapLocation: Joi.string().required()
         }),
         params: Joi.object().required().keys({
             id: Joi.string().required().min(24).max(24)
