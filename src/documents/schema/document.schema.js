@@ -18,6 +18,10 @@ const documentSchema = new Schema({
         default: "open"
     },
     seen: { type: Boolean, required: true, default: true },
+    phone: { type: String },
+    contactEmail: { type: String },
+    commercialR: { type: String },
+    iD: { type: String },
     activity: [{ type: Object }]
 }, { timestamps: true })
 

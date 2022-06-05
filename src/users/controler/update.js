@@ -9,12 +9,12 @@ const jwt = require('jsonwebtoken');
 
 const updateProfile = async(req, res) => {
     try {
-        let { name, email, companyName, position, city, mapLocation } = req.body;
+        let { email, companyName, city, mapLocation } = req.body;
         email = email.toLowerCase()
         const { id } = req.params;
         if (id == req.user._id) {
             if (email == req.user.email) {
-                const data = await User.findByIdAndUpdate({ _id: id }, { name, companyName, position, city, mapLocation }, { new: true });
+                const data = await User.findByIdAndUpdate({ _id: id }, { companyName, city, mapLocation }, { new: true });
                 const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = data._doc
                 const token = jwt.sign({...rest }, process.env.SECRET_KEY)
                 res.status(StatusCodes.OK).json({ message: "Updated successfully", token });
@@ -25,7 +25,7 @@ const updateProfile = async(req, res) => {
                 } else {
                     const subject = `Email confirmation`
                     const verificationKey = nanoid()
-                    const data = await User.findByIdAndUpdate({ _id: id }, { name, email, companyName, position, city, mapLocation, verified: false, logedIn: false, verificationKey }, { new: true });
+                    const data = await User.findByIdAndUpdate({ _id: id }, { email, companyName, city, mapLocation, verified: false, logedIn: false, verificationKey }, { new: true });
                     const info = await sendEmail([email], updateTemplate(verificationKey), subject)
                     if (info.messageId) {
                         const token = jwt.sign({ _id: data._id }, process.env.SECRET_KEY)

@@ -9,6 +9,7 @@ const updateDocument = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: req.fileValidationError });
         } else {
             const { id, documentId } = req.params
+            const { phone, contactEmail, commercialR, iD } = req.body
             const document = await Document.findOne({ _id: documentId, status: "pending" })
             if (!document) {
                 res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid document" });
@@ -40,7 +41,7 @@ const updateDocument = async(req, res) => {
                                         }
                                     })
                                 })
-                                const updatedDocument = await Document.findOneAndUpdate({ _id: documentId }, { documents: oldFiles, status: "open" }, { new: true })
+                                const updatedDocument = await Document.findOneAndUpdate({ _id: documentId }, { documents: oldFiles, phone, contactEmail, commercialR, iD, status: "open" }, { new: true })
                                 const followUp = await FollowUp.findOneAndUpdate({ requestId: documentId }, { status: "closed" })
                                 res.status(StatusCodes.CREATED).json({ message: "Documents updated successfully", data: updatedDocument });
                             } else {

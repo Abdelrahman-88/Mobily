@@ -5,9 +5,7 @@ const Joi = require('joi');
 module.exports = {
     registerSchema: {
         body: Joi.object().required().keys({
-            name: Joi.string().required(),
             companyName: Joi.string().required(),
-            position: Joi.string().required(),
             city: Joi.string().required(),
             email: Joi.string().required().email(),
             password: Joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z@_$&]{8,}$/)).required(),
@@ -38,10 +36,8 @@ module.exports = {
     updateProfileSchema: {
         body: Joi.object().required().keys({
             email: Joi.string().required().email(),
-            name: Joi.string().required(),
             companyName: Joi.string().required(),
             city: Joi.string().required(),
-            position: Joi.string().required(),
             mapLocation: Joi.string().required()
         }),
         params: Joi.object().required().keys({

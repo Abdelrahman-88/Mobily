@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const Order = require("../model/order.model");
 const pageService = require("../../../common/service/page");
-const searchServies = require("../../../common/service/search")
+const searchServies = require("../../../common/service/search");
 
 const getOrderById = async(req, res) => {
     try {

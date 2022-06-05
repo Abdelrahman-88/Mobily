@@ -21,7 +21,7 @@ const validateDocument = async(req, res) => {
                     const activity = [{ employeeId, comment, date: now }, ...document.activity]
                     if (expiryDate > validDate) {
                         if (valid == 'valid' && status == "closed") {
-                            const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "" })
+                            const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "", phone, contactEmail, commercialR, iD })
                             const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true, phone, contactEmail, commercialR, iD })
                             res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                         } else {

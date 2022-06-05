@@ -4,12 +4,24 @@ module.exports = {
     addDocumentSchema: {
         params: Joi.object().required().keys({
             createdBy: Joi.string().required().min(24).max(24)
+        }),
+        body: Joi.object().required().keys({
+            phone: Joi.string().required(),
+            contactEmail: Joi.string().email().required(),
+            commercialR: Joi.string().required(),
+            iD: Joi.string().required()
         })
     },
     updateDocumentSchema: {
         params: Joi.object().required().keys({
             id: Joi.string().required().min(24).max(24),
             documentId: Joi.string().required().min(24).max(24)
+        }),
+        body: Joi.object().required().keys({
+            phone: Joi.string().required(),
+            contactEmail: Joi.string().email().required(),
+            commercialR: Joi.string().required(),
+            iD: Joi.string().required()
         })
     },
     getDocumentSchema: {
