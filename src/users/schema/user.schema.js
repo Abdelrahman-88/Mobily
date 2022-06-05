@@ -13,8 +13,8 @@ const userSchema = new Schema({
     city: { type: String, required: true },
     phone: { type: String },
     contactEmail: { type: String },
-    commercialR: { type: String },
-    iD: { type: String },
+    commercialRNumber: { type: String },
+    idNumber: { type: String },
     role: {
         type: String,
         enum: ["user"],

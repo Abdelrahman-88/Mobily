@@ -21,7 +21,7 @@ const addDocument = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: req.fileValidationError });
         } else {
             const { createdBy } = req.params
-            const { phone, contactEmail, commercialR, iD } = req.body
+            const { phone, contactEmail, commercialRNumber, idNumber } = req.body
             const document = await Document.findOne({ createdBy, status: { $ne: "closed" } })
             if (document) {
                 res.status(StatusCodes.BAD_REQUEST).json({ message: "Already has open document", document });
@@ -39,7 +39,7 @@ const addDocument = async(req, res) => {
                                         url: process.env.URL + 'displayDocument/' + req.files[key][0].filename
                                     })
                                 }
-                                const newDocument = new Document({ createdBy, documents: filesUrl, phone, contactEmail, commercialR, iD })
+                                const newDocument = new Document({ createdBy, documents: filesUrl, phone, contactEmail, commercialRNumber, idNumber })
                                 const data = await newDocument.save()
                                 res.status(StatusCodes.CREATED).json({ message: "Documents added successfully", data });
                             } else {

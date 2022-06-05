@@ -9,7 +9,7 @@ const adminSchema = new Schema({
     employeeId: { type: Number, unique: true },
     role: {
         type: String,
-        enum: ["admin", "sales", "operator", "techS", "callC"],
+        enum: ["superAdmin", "admin", "sales", "operator", "techS", "callC"],
         required: true
     },
     verificationKey: { type: String, required: true },

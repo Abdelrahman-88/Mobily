@@ -6,7 +6,7 @@ const Document = require("../model/document.model");
 const validateDocument = async(req, res) => {
     try {
         const { documentId } = req.params
-        let { expiryDate, valid, status, comment, phone, contactEmail, commercialR, iD } = req.body
+        let { expiryDate, valid, status, comment, phone, contactEmail, commercialRNumber, idNumber } = req.body
         expiryDate = new Date(expiryDate).toISOString()
         const validDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1, 0, 0, 0).toISOString()
         const now = new Date().toISOString()
@@ -21,8 +21,8 @@ const validateDocument = async(req, res) => {
                     const activity = [{ employeeId, comment, date: now }, ...document.activity]
                     if (expiryDate > validDate) {
                         if (valid == 'valid' && status == "closed") {
-                            const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "", phone, contactEmail, commercialR, iD })
-                            const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true, phone, contactEmail, commercialR, iD })
+                            const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "", phone, contactEmail, commercialRNumber, idNumber })
+                            const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: document._id, documentExpiryDate: document.expiryDate, documentValidity: true, phone, contactEmail, commercialRNumber, idNumber })
                             res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                         } else {
                             const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: "" })
@@ -55,7 +55,7 @@ const removeDocumentAction = async(req, res) => {
         const document = await Document.findOne({ _id: documentId })
         if (document) {
             if (document.action) {
-                if (req.user._id.equals(document.actionBy)) {
+                if (req.user._id.equals(document.actionBy) || req.user.role == "superAdmin") {
                     const remove = await Document.findOneAndUpdate({ _id: documentId }, { action: false, actionBy: "" })
                     res.status(StatusCodes.OK).json({ message: "Action removed successfully" });
                 } else {

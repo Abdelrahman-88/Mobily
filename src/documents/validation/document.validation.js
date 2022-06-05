@@ -8,8 +8,8 @@ module.exports = {
         body: Joi.object().required().keys({
             phone: Joi.string().required(),
             contactEmail: Joi.string().email().required(),
-            commercialR: Joi.string().required(),
-            iD: Joi.string().required()
+            commercialRNumber: Joi.string().required(),
+            idNumber: Joi.string().required()
         })
     },
     updateDocumentSchema: {
@@ -20,8 +20,8 @@ module.exports = {
         body: Joi.object().required().keys({
             phone: Joi.string().required(),
             contactEmail: Joi.string().email().required(),
-            commercialR: Joi.string().required(),
-            iD: Joi.string().required()
+            commercialRNumber: Joi.string().required(),
+            idNumber: Joi.string().required()
         })
     },
     getDocumentSchema: {
@@ -57,8 +57,8 @@ module.exports = {
             comment: Joi.string().required(),
             phone: Joi.string().required(),
             contactEmail: Joi.string().email().required(),
-            commercialR: Joi.string().required(),
-            iD: Joi.string().required()
+            commercialRNumber: Joi.string().required(),
+            idNumber: Joi.string().required()
         })
     },
     getUserDocumentsSchema: {
