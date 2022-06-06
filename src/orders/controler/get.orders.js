@@ -43,7 +43,7 @@ const getAllOrders = async(req, res) => {
     try {
         let { page, size, status, activated, action, actionBy } = req.query
         const { skip, limit, currentPage } = pageService(page, size)
-        const orders = await searchServies("", { status, activated, action, actionBy }, limit, skip, Order, [], "cartId createdBy", "companyName name")
+        const orders = await searchServies("", { status, activated, action, actionBy }, limit, skip, Order, [], "cartId createdBy", "companyName name", "")
         if (orders.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
         } else {
@@ -60,7 +60,7 @@ const getUserOrders = async(req, res) => {
         if (req.user._id == createdBy) {
             let { page, size, status, activated } = req.query
             const { skip, limit, currentPage } = pageService(page, size)
-            const orders = await searchServies("", { createdBy, status, activated }, limit, skip, Order, [], "cartId", "")
+            const orders = await searchServies("", { createdBy, status, activated }, limit, skip, Order, [], "cartId", "", "")
             if (orders.data.length) {
                 res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
             } else {
@@ -81,7 +81,7 @@ const getSeenOrders = async(req, res) => {
         if (req.user._id == createdBy) {
             let { page, size } = req.query
             const { skip, limit, currentPage } = pageService(page, size)
-            const orders = await searchServies("", { createdBy, seen: false }, limit, skip, Order, [], "", "")
+            const orders = await searchServies("", { createdBy, seen: false }, limit, skip, Order, [], "", "", "")
             if (orders.data.length) {
                 res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: orders.totalPages, total: orders.total, data: orders.data });
             } else {

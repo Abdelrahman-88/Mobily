@@ -10,7 +10,7 @@ const getSeenDocuments = async(req, res) => {
         if (req.user._id == createdBy) {
             let { page, size } = req.query
             const { skip, limit, currentPage } = pageService(page, size)
-            const documents = await searchServies("", { createdBy, seen: false }, limit, skip, Document, [], "", "")
+            const documents = await searchServies("", { createdBy, seen: false }, limit, skip, Document, [], "", "", "")
             if (documents.data.length) {
                 res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: documents.totalPages, total: documents.total, data: documents.data });
             } else {

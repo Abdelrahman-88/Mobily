@@ -4,6 +4,7 @@ const RESET_PASSWORD = "user:RESET_PASSWORD"
 const CHANGE_PASSWORD = "user:CHANGE_PASSWORD"
 const LOG_OUT = "user:LOG_OUT"
 const USER_EXPIRE_DOCMENT = "admin:USER_EXPIRE_DOCMENT"
+const GET_ALL_USERS = "superAdmin:GET_ALL_USERS"
 
 module.exports = {
     UPDATE_PROFILE,
@@ -11,5 +12,6 @@ module.exports = {
     RESET_PASSWORD,
     CHANGE_PASSWORD,
     LOG_OUT,
-    USER_EXPIRE_DOCMENT
+    USER_EXPIRE_DOCMENT,
+    GET_ALL_USERS
 }

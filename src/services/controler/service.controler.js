@@ -24,7 +24,7 @@ const getAllServices = async(req, res) => {
     try {
         let { page, size, search, category } = req.query
         const { skip, limit, currentPage } = pageService(page, size)
-        const servies = await searchServies(search, { "status": "valid", category }, limit, skip, Service, ["name"], "", "")
+        const servies = await searchServies(search, { "status": "valid", category }, limit, skip, Service, ["name"], "", "", "")
         if (servies.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: servies.totalPages, total: servies.total, data: servies.data });
         } else {
@@ -40,7 +40,7 @@ const getAllServicesAdmin = async(req, res) => {
     try {
         let { page, size, search, category, status } = req.query
         const { skip, limit, currentPage } = pageService(page, size)
-        const servies = await searchServies(search, { status, category }, limit, skip, Service, ["name"], "", "")
+        const servies = await searchServies(search, { status, category }, limit, skip, Service, ["name"], "", "", "")
         if (servies.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: servies.totalPages, total: servies.total, data: servies.data });
         } else {

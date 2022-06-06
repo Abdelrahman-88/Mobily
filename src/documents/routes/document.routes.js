@@ -20,7 +20,8 @@ const {
     updateSeenDocumentsSchema,
     removeDocumentActionSchema,
     checkDocumentSchema,
-    updateDocumentSchema
+    updateDocumentSchema,
+    editDocumentSchema
 } = require("../validation/document.validation");
 const {
     UPLOAD_FILE,
@@ -32,7 +33,8 @@ const {
     UPDATE_SEEN_DOCUMENTS,
     REMOVE_DOCUMENT_ACTION,
     CHECK_DOCUMENT,
-    UPDATE_FILE
+    UPDATE_FILE,
+    EDIT_DOCUMENT
 } = require("../endPoints");
 const {
     validateDocument,
@@ -41,6 +43,7 @@ const {
 } = require("../controler/validate");
 const { getSeenDocuments, updateSeenDocuments } = require("../controler/seen");
 const { updateDocument } = require("../controler/update");
+const { editDocument } = require("../controler/edit");
 
 const router = require("express").Router();
 
@@ -78,5 +81,7 @@ router.patch("/updateSeenDocuments/:createdBy", validation(updateSeenDocumentsSc
 router.patch("/removeDocumentAction/:documentId", validation(removeDocumentActionSchema), isAuthorized(REMOVE_DOCUMENT_ACTION), removeDocumentAction)
 
 router.get("/checkDocument/:createdBy", validation(checkDocumentSchema), isAuthorized(CHECK_DOCUMENT), checkDocument);
+
+router.put("/editDocument/:documentId", validation(editDocumentSchema), isAuthorized(EDIT_DOCUMENT), editDocument)
 
 module.exports = router;

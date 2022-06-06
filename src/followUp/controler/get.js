@@ -40,7 +40,7 @@ const getAllFollowUp = async(req, res) => {
         }
         const yesterday = new Date(new Date(new Date().setHours(0, 0, 0, 0)).setDate(new Date().getDate() - 2)).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)
-        const followUp = await searchServies("", {...value, status, createdAt: { $lte: yesterday } }, limit, skip, FollowUp, [], "", "")
+        const followUp = await searchServies("", {...value, status, createdAt: { $lte: yesterday } }, limit, skip, FollowUp, [], "", "", "")
         if (followUp.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: followUp.totalPages, total: followUp.total, data: followUp.data });
 

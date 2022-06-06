@@ -24,7 +24,8 @@ const {
     resetPasswordSchema,
     changePasswordSchema,
     logOutSchema,
-    userExpireDocmentSchema
+    userExpireDocmentSchema,
+    getAllUsersSchema
 } = require("../validation/user.validation");
 const isAuthorized = require("../../../common/middelWare/isAuthorized");
 const {
@@ -33,10 +34,11 @@ const {
     RESET_PASSWORD,
     CHANGE_PASSWORD,
     LOG_OUT,
-    USER_EXPIRE_DOCMENT
+    USER_EXPIRE_DOCMENT,
+    GET_ALL_USERS
 } = require("../endPoint");
 const { userExpireDocment } = require("../controler/expire");
-
+const { getAllUsers } = require("../controler/get");
 
 router.post("/register", validation(registerSchema), register);
 
@@ -60,6 +62,7 @@ router.patch("/logOut/:id", validation(logOutSchema), isAuthorized(LOG_OUT), log
 
 router.patch("/userExpireDocment", validation(userExpireDocmentSchema), isAuthorized(USER_EXPIRE_DOCMENT), userExpireDocment);
 
+router.get("/getAllUsers", validation(getAllUsersSchema), isAuthorized(GET_ALL_USERS), getAllUsers)
 
 
 

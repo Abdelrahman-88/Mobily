@@ -83,5 +83,12 @@ module.exports = {
             from: Joi.date().required(),
             to: Joi.date().required()
         })
+    },
+    getAllUsersSchema: {
+        query: Joi.object().required().keys({
+            page: Joi.string().allow(''),
+            size: Joi.string().allow(''),
+            search: Joi.string().allow('')
+        })
     }
 }

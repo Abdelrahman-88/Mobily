@@ -95,5 +95,20 @@ module.exports = {
         params: Joi.object().required().keys({
             createdBy: Joi.string().required().min(24).max(24)
         })
+    },
+    editDocumentSchema: {
+        params: Joi.object().required().keys({
+            documentId: Joi.string().required().min(24).max(24)
+        }),
+        body: Joi.object().required().keys({
+            expiryDate: Joi.date().required(),
+            valid: Joi.string().valid('valid', 'invalid').required(),
+            status: Joi.string().valid('closed', 'pending').required(),
+            comment: Joi.string().required(),
+            phone: Joi.string().required(),
+            contactEmail: Joi.string().email().required(),
+            commercialRNumber: Joi.string().required(),
+            idNumber: Joi.string().required()
+        })
     }
 }

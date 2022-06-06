@@ -71,16 +71,19 @@ const getDocument = async(req, res) => {
             if (req.user._id.equals(_id)) {
                 const seen = await Document.findOneAndUpdate({ _id: documentId }, { seen: true }, { new: true }).populate('createdBy', '-password -verificationKey')
                 res.status(StatusCodes.OK).json({ message: "done", document: seen });
-            } else if (req.user.role == "admin" || req.user.role == "operator") {
+            } else if (req.user.role == "admin" || req.user.role == "operator" || req.user.role == "superAdmin") {
                 if (document.action) {
                     document = await Document.findOne({ _id: documentId }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
-                    if (req.user._id.equals(document.actionBy._id)) {
+                    if (req.user._id.equals(document.actionBy._id) || req.user.role == "superAdmin") {
                         res.status(StatusCodes.OK).json({ message: "done", document });
                     } else {
                         res.status(StatusCodes.UNAUTHORIZED).json({ message: `Request opend by employee Id ${document.actionBy.employeeId}` });
                     }
                 } else {
-                    const action = await Document.findOneAndUpdate({ _id: documentId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
+                    let action;
+                    if (req.user.role != "superAdmin") {
+                        action = await Document.findOneAndUpdate({ _id: documentId, status: { $ne: "closed" } }, { actionBy: req.user._id, action: true }, { new: true }).populate('createdBy', '-password -verificationKey').populate("actionBy", "employeeId")
+                    }
                     if (action) {
                         res.status(StatusCodes.OK).json({ message: "done", document: action });
                     } else {
@@ -94,7 +97,6 @@ const getDocument = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "invalid document" });
         }
     } catch (error) {
-        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get document" });
     }
 }
@@ -146,7 +148,7 @@ const getAllDocuments = async(req, res) => {
         from = new Date(from).toISOString()
         to = new Date(to).toISOString()
         const { skip, limit, currentPage } = pageService(page, size)
-        const documents = await searchServies("", { status, valid, action, actionBy }, limit, skip, Document, [], "createdBy", "-password -verificationKey")
+        const documents = await searchServies("", { status, valid, action, actionBy }, limit, skip, Document, [], "createdBy", "-password -verificationKey", "")
         if (documents.data.length) {
             res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: documents.totalPages, total: documents.total, data: documents.data });
         } else {
@@ -164,7 +166,7 @@ const getUserDocuments = async(req, res) => {
         if (req.user._id == createdBy) {
             let { page, size, status, valid } = req.query
             const { skip, limit, currentPage } = pageService(page, size)
-            const documents = await searchServies("", { createdBy, status, valid }, limit, skip, Document, [], "", "")
+            const documents = await searchServies("", { createdBy, status, valid }, limit, skip, Document, [], "", "", "")
             if (documents.data.length) {
                 res.status(StatusCodes.OK).json({ message: "done", currentPage, limit, totalPages: documents.totalPages, total: documents.total, data: documents.data });
             } else {

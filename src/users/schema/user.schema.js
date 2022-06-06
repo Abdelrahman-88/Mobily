@@ -6,7 +6,7 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     email: { type: String, required: true },
     mapLocation: { type: String, required: true },
-    documentId: { type: Schema.Types.ObjectId, ref: "document" },
+    documentId: { type: Schema.Types.String, ref: "document" },
     documentExpiryDate: Date,
     documentValidity: { type: Boolean, default: false },
     salesId: { type: Number },
