@@ -23,7 +23,7 @@ const addCart = async(req, res) => {
             await Promise.all(promises);
             const newCart = new Cart({ createdBy, services: newServices, totalPrice });
             const cart = await newCart.save();
-            const newOrder = new Order({ createdBy, cartId: cart._id });
+            const newOrder = new Order({ createdBy, requestId: cart._id, type: "cart" });
             const order = await newOrder.save();
             res.status(StatusCodes.CREATED).json({ message: "Cart added successfully" });
         } else {

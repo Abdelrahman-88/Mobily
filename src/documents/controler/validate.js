@@ -21,11 +21,11 @@ const validateDocument = async(req, res) => {
                     const activity = [{ employeeId, comment, date: now }, ...document.activity]
                     if (expiryDate > validDate) {
                         if (valid == 'valid' && status == "closed") {
-                            const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "", phone, contactEmail, commercialRNumber, idNumber }, { new: true })
+                            const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: null, phone, contactEmail, commercialRNumber, idNumber }, { new: true })
                             const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: update._id, documentExpiryDate: update.expiryDate, documentValidity: true, phone, contactEmail, commercialRNumber, idNumber })
                             res.status(StatusCodes.OK).json({ message: "Document validated successfully" });
                         } else {
-                            const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: "" })
+                            const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: null })
                             if (status == "pending") {
                                 const followUp = new FollowUp({ userId: document.createdBy, requestId: documentId })
                                 const saved = await followUp.save()
@@ -56,7 +56,7 @@ const removeDocumentAction = async(req, res) => {
         if (document) {
             if (document.action) {
                 if (req.user._id.equals(document.actionBy) || req.user.role == "superAdmin") {
-                    const remove = await Document.findOneAndUpdate({ _id: documentId }, { action: false, actionBy: "" })
+                    const remove = await Document.findOneAndUpdate({ _id: documentId }, { action: false, actionBy: null })
                     res.status(StatusCodes.OK).json({ message: "Action removed successfully" });
                 } else {
                     res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });

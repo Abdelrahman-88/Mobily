@@ -112,7 +112,6 @@ const displayDocument = async(req, res) => {
                 }
             }
         })
-
         if (file) {
             let downloadStream = gfs.openDownloadStreamByName(filename);
             downloadStream = downloadStream.pipe(res)
@@ -125,9 +124,7 @@ const displayDocument = async(req, res) => {
             notFoundStream.on("data", function(data) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(data);
             });
-
         }
-
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to display document" });
     }

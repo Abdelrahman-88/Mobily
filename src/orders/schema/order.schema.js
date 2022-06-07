@@ -3,7 +3,7 @@ const { Schema } = require("mongoose")
 
 const orderSchema = new Schema({
     createdBy: { type: Schema.Types.ObjectId, ref: "user" },
-    cartId: { type: Schema.Types.ObjectId, ref: "cart" },
+    requestId: { type: Schema.Types.ObjectId },
     actionBy: { type: Schema.Types.String, ref: "admin" },
     action: { type: Boolean, default: false },
     status: {
@@ -12,12 +12,35 @@ const orderSchema = new Schema({
         required: true,
         default: "open"
     },
+    type: {
+        type: String,
+        enum: ["cart", "priceOffer"]
+    },
     activated: { type: Boolean, required: true, default: false },
     seen: { type: Boolean, required: true, default: true },
     ban: { type: Boolean, default: false },
     activity: [{ type: Object }]
 
-}, { timestamps: true })
+}, {
+    id: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    timestamps: true
+})
+
+orderSchema.virtual('cart', {
+    ref: 'cart',
+    localField: 'requestId',
+    foreignField: '_id',
+    justOne: true
+});
+
+orderSchema.virtual('priceOffer', {
+    ref: 'priceOffer',
+    localField: 'requestId',
+    foreignField: '_id',
+    justOne: true
+});
 
 
 module.exports = orderSchema

@@ -14,7 +14,7 @@ const validateFollowUp = async(req, res) => {
                 if (req.user._id.equals(validFollowUp.actionBy)) {
                     const { employeeId } = req.user._doc
                     const activity = [{ employeeId, comment, date: now }, ...validFollowUp.activity]
-                    const followUp = await FollowUp.findOneAndUpdate({ _id: followUpId }, { status, answered, comment, seen: false, activity, action: false, actionBy: "" })
+                    const followUp = await FollowUp.findOneAndUpdate({ _id: followUpId }, { status, answered, comment, seen: false, activity, action: false, actionBy: null })
                     if (followUp) {
                         res.status(StatusCodes.OK).json({ message: "Followup validated successfully" });
                     } else {
@@ -40,7 +40,7 @@ const removeFollowUpAction = async(req, res) => {
         if (followUp) {
             if (followUp.action) {
                 if (req.user._id.equals(followUp.actionBy)) {
-                    const remove = await FollowUp.findOneAndUpdate({ _id: followUpId }, { action: false, actionBy: "" })
+                    const remove = await FollowUp.findOneAndUpdate({ _id: followUpId }, { action: false, actionBy: null })
                     res.status(StatusCodes.OK).json({ message: "Action removed successfully" });
                 } else {
                     res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });

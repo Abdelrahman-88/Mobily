@@ -16,17 +16,17 @@ const editDocument = async(req, res) => {
             const activity = [{ employeeId, comment, date: now }, ...document.activity]
             if (expiryDate > validDate) {
                 if (valid == 'valid' && status == "closed") {
-                    const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: "", phone, contactEmail, commercialRNumber, idNumber }, { new: true })
+                    const update = await Document.findOneAndUpdate({ _id: documentId }, { expiryDate, valid, status, seen: false, activity, action: false, actionBy: null, phone, contactEmail, commercialRNumber, idNumber }, { new: true })
                     const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: update._id, documentExpiryDate: update.expiryDate, documentValidity: true, phone, contactEmail, commercialRNumber, idNumber })
                     res.status(StatusCodes.OK).json({ message: "Document edited successfully" });
                 } else {
-                    const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: "", expiryDate: "" }, { new: true })
+                    const update = await Document.findOneAndUpdate({ _id: documentId }, { valid, status, seen: false, comment, activity, action: false, actionBy: null, expiryDate: "" }, { new: true })
                     if (document.status == 'closed' && document.valid == 'valid') {
                         const oldValidDoc = await Document.findOne({ createdBy: document.createdBy, expiryDate: { $gt: validDate }, valid: 'valid', status: "closed" })
                         if (oldValidDoc) {
                             const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: oldValidDoc._id, documentExpiryDate: oldValidDoc.expiryDate, documentValidity: true, phone: oldValidDoc.phone, contactEmail: oldValidDoc.contactEmail, commercialRNumber: oldValidDoc.commercialRNumber, idNumber: oldValidDoc.idNumber })
                         } else {
-                            const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: '', documentExpiryDate: '', documentValidity: false, phone: '', contactEmail: '', commercialRNumber: '', idNumber: '' })
+                            const user = await User.findOneAndUpdate({ _id: document.createdBy }, { documentId: null, documentExpiryDate: '', documentValidity: false, phone: '', contactEmail: '', commercialRNumber: '', idNumber: '' })
                         }
                     }
                     if (status == "pending" && document.status != 'pending') {

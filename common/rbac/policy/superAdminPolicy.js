@@ -1,4 +1,7 @@
-const { ADD_ADMIN } = require("../../../src/admins/endPoints");
+const {
+    ADD_ADMIN,
+    ADMIN_LOG_OUT
+} = require("../../../src/admins/endPoints");
 const {
     GET_ALL_DOCUMENT,
     GET_DOCUMENT,
@@ -7,4 +10,4 @@ const {
 } = require("../../../src/documents/endPoints");
 const { GET_ALL_USERS } = require("../../../src/users/endPoint");
 
-module.exports = [ADD_ADMIN, GET_ALL_DOCUMENT, GET_DOCUMENT, REMOVE_DOCUMENT_ACTION, EDIT_DOCUMENT, GET_ALL_USERS]
+module.exports = [ADD_ADMIN, GET_ALL_DOCUMENT, GET_DOCUMENT, REMOVE_DOCUMENT_ACTION, EDIT_DOCUMENT, GET_ALL_USERS, ADMIN_LOG_OUT]

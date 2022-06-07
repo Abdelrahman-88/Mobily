@@ -19,6 +19,7 @@ module.exports = {
             page: Joi.string().allow(''),
             size: Joi.string().allow(''),
             status: Joi.string().valid("open", "closed", "pending").allow(''),
+            type: Joi.string().valid("cart", "priceOffer").allow(''),
             activated: Joi.boolean().allow(''),
             action: Joi.boolean().allow(''),
             actionBy: Joi.string().min(24).max(24).allow('')
@@ -32,7 +33,12 @@ module.exports = {
             activated: Joi.boolean().required(),
             status: Joi.string().valid("closed", "pending").required(),
             comment: Joi.string().required(),
-            ban: Joi.boolean()
+            ban: Joi.boolean(),
+            services: Joi.array().items({
+                serviceId: Joi.string().required().min(24).max(24),
+                quantity: Joi.number().required(),
+                price: Joi.number().required()
+            })
         })
     },
     getUserOrdersSchema: {
@@ -43,6 +49,7 @@ module.exports = {
             page: Joi.string().allow(''),
             size: Joi.string().allow(''),
             status: Joi.string().valid("open", "closed", "pending").allow(''),
+            type: Joi.string().valid("cart", "priceOffer").allow(''),
             activated: Joi.boolean().allow('')
         })
     },
