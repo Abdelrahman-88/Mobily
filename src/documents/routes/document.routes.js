@@ -38,7 +38,6 @@ const {
 } = require("../endPoints");
 const {
     validateDocument,
-    activateService,
     removeDocumentAction
 } = require("../controler/validate");
 const { getSeenDocuments, updateSeenDocuments } = require("../controler/seen");

@@ -7,7 +7,7 @@ const pageService = require("../../../common/service/page");
 const searchServies = require("../../../common/service/search")
 const jwt = require('jsonwebtoken');
 
-let gfs
+let gfs;
 conn.once("open", () => {
     // init stream
     gfs = new mongoose.mongo.GridFSBucket(conn.db, {
