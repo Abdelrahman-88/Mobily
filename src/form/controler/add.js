@@ -1,8 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { conn } = require("../../../common/connection/confg");
-const Transfer = require("../model/transfer.model");
 const mongoose = require('mongoose');
-const Order = require("../../orders/model/order.model");
+const Form = require("../model/form.model");
 
 let gfs;
 conn.once("open", () => {
@@ -12,41 +11,39 @@ conn.once("open", () => {
     });
 });
 
-const addTransfer = async(req, res) => {
+const addForm = async(req, res) => {
     try {
         if (req.fileValidationError) {
             res.status(StatusCodes.BAD_REQUEST).json({ message: req.fileValidationError });
         } else {
-            const { createdBy } = req.params
-            if (createdBy == req.user._id) {
-                if (req.file) {
-                    let transferForm = {
-                        name: req.file.filename,
-                        url: process.env.URL + 'displayForm/' + req.file.filename
-                    }
-                    const transfer = new Transfer({ createdBy, transferForm })
-                    const data = await transfer.save()
-                    const newOrder = new Order({ createdBy, requestId: transfer._id, type: "transfer" });
-                    const order = await newOrder.save();
-                    res.status(StatusCodes.CREATED).json({ message: "Transfer form sent successfully" });
-                } else {
-                    res.status(StatusCodes.BAD_REQUEST).json({ message: "Transfer form is required" });
-                }
+            const { type } = req.body
+            const find = await Form.findOne({ type })
+            if (find) {
+                res.status(StatusCodes.BAD_REQUEST).json({ message: "Form already exist" });
             } else {
-                res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
+                if (req.file) {
+                    let form = {
+                        name: req.file.filename,
+                        url: process.env.URL + 'displayForms/' + req.file.filename
+                    }
+                    const newForm = new Form({ type, form })
+                    const data = await newForm.save()
+                    res.status(StatusCodes.CREATED).json({ message: "Form added successfully" });
+                } else {
+                    res.status(StatusCodes.BAD_REQUEST).json({ message: "Form is required" });
+                }
             }
         }
     } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to send transfer form" });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to add form" });
     }
 }
 
-
-const displayForm = async(req, res) => {
+const displayForms = async(req, res) => {
     try {
         const { filename } = req.params
-        const file = await Transfer.findOne({
-            "transferForm.name": filename
+        const file = await Form.findOne({
+            "form.name": filename
         })
         if (file) {
             let downloadStream = gfs.openDownloadStreamByName(filename);
@@ -69,7 +66,8 @@ const displayForm = async(req, res) => {
 
 
 
+
 module.exports = {
-    addTransfer,
-    displayForm
+    addForm,
+    displayForms
 }

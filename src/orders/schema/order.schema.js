@@ -14,7 +14,7 @@ const orderSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ["cart", "priceOffer"]
+        enum: ["cart", "priceOffer", "transfer"]
     },
     activated: { type: Boolean, required: true, default: false },
     seen: { type: Boolean, required: true, default: true },
@@ -37,6 +37,13 @@ orderSchema.virtual('cart', {
 
 orderSchema.virtual('priceOffer', {
     ref: 'priceOffer',
+    localField: 'requestId',
+    foreignField: '_id',
+    justOne: true
+});
+
+orderSchema.virtual('transfer', {
+    ref: 'transfer',
     localField: 'requestId',
     foreignField: '_id',
     justOne: true

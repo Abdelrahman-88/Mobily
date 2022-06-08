@@ -7,6 +7,7 @@ const cartRouter = require('../../src/cart/routes/cart.routes');
 const followUPRouter = require('../../src/followUp/routes/followUp.routes');
 const priceOfferRouter = require('../../src/priceOffer/routes/priceOffer.routes');
 const transferRouter = require('../../src/transfer/routes/transfer.routes');
+const formRouter = require('../../src/form/routes/form.routes');
 
 module.exports = {
     userRouter,
@@ -17,5 +18,6 @@ module.exports = {
     cartRouter,
     followUPRouter,
     priceOfferRouter,
-    transferRouter
+    transferRouter,
+    formRouter
 }

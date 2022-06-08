@@ -19,7 +19,7 @@ module.exports = {
             page: Joi.string().allow(''),
             size: Joi.string().allow(''),
             status: Joi.string().valid("open", "closed", "pending").allow(''),
-            type: Joi.string().valid("cart", "priceOffer").allow(''),
+            type: Joi.string().valid("cart", "priceOffer", "transfer").allow(''),
             activated: Joi.boolean().allow(''),
             action: Joi.boolean().allow(''),
             actionBy: Joi.string().min(24).max(24).allow('')
@@ -49,7 +49,7 @@ module.exports = {
             page: Joi.string().allow(''),
             size: Joi.string().allow(''),
             status: Joi.string().valid("open", "closed", "pending").allow(''),
-            type: Joi.string().valid("cart", "priceOffer").allow(''),
+            type: Joi.string().valid("cart", "priceOffer", "transfer").allow(''),
             activated: Joi.boolean().allow('')
         })
     },

@@ -22,7 +22,7 @@ const addPriceOffer = async(req, res) => {
             const offer = await newOffer.save();
             const newOrder = new Order({ createdBy, requestId: offer._id, type: "priceOffer" });
             const order = await newOrder.save();
-            res.status(StatusCodes.CREATED).json({ message: "Price offer sent successfully", offer, order });
+            res.status(StatusCodes.CREATED).json({ message: "Price offer sent successfully" });
         } else {
             res.status(StatusCodes.UNAUTHORIZED).json({ message: "UNAUTHORIZED" });
         }

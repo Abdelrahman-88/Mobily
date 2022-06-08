@@ -11,7 +11,8 @@ const {
     cartRouter,
     followUPRouter,
     priceOfferRouter,
-    transferRouter
+    transferRouter,
+    formRouter
 } = require('./common/router/allRoutes')
 const runJob = require('./common/jobs')
 
@@ -23,7 +24,7 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req, res) => res.send('welcome'))
-app.use(userRouter, documentRouter, adminRouter, serviceRouter, orderRouter, cartRouter, followUPRouter, priceOfferRouter, transferRouter)
+app.use(userRouter, documentRouter, adminRouter, serviceRouter, orderRouter, cartRouter, followUPRouter, priceOfferRouter, transferRouter, formRouter)
 dbConnection()
 
 runJob()
