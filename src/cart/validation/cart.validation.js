@@ -8,7 +8,7 @@ module.exports = {
         }),
         body: Joi.array().required().items({
             serviceId: Joi.string().required().min(24).max(24),
-            quantity: Joi.number().required()
+            quantity: Joi.number().required().greater(0)
         })
     },
     sendVerificationKeySchema: {

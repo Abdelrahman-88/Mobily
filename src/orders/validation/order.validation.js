@@ -36,8 +36,8 @@ module.exports = {
             ban: Joi.boolean(),
             services: Joi.array().items({
                 serviceId: Joi.string().required().min(24).max(24),
-                quantity: Joi.number().required(),
-                price: Joi.number().required()
+                quantity: Joi.number().required().greater(0),
+                price: Joi.number().required().greater(0)
             })
         })
     },
