@@ -90,5 +90,10 @@ module.exports = {
             size: Joi.string().allow(''),
             search: Joi.string().allow('')
         })
+    },
+    displayProfilePicSchema: {
+        params: Joi.object().required().keys({
+            filename: Joi.string().required()
+        })
     }
 }

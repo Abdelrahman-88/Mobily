@@ -25,7 +25,8 @@ const {
     changePasswordSchema,
     logOutSchema,
     userExpireDocmentSchema,
-    getAllUsersSchema
+    getAllUsersSchema,
+    displayProfilePicSchema
 } = require("../validation/user.validation");
 const isAuthorized = require("../../../common/middelWare/isAuthorized");
 const {
@@ -38,7 +39,11 @@ const {
     GET_ALL_USERS
 } = require("../endPoint");
 const { userExpireDocment } = require("../controler/expire");
-const { getAllUsers } = require("../controler/get");
+const {
+    getAllUsers,
+    displayProfilePic
+} = require("../controler/get");
+const uploadPic = require("../../../common/service/uploadPic");
 
 router.post("/register", validation(registerSchema), register);
 
@@ -48,7 +53,7 @@ router.get("/resendVerificationKey/:id", validation(resendVerificationKeySchema)
 
 router.post("/logIn", validation(logInSchema), logIn);
 
-router.patch("/updateProfile/:id", validation(updateProfileSchema), isAuthorized(UPDATE_PROFILE), updateProfile);
+router.patch("/updateProfile/:id", uploadPic.single('profilePic'), validation(updateProfileSchema), isAuthorized(UPDATE_PROFILE), updateProfile);
 
 router.patch("/updatePassword/:id", validation(updatePasswordSchema), isAuthorized(UPDATE_PASSWORD), updatePassword);
 
@@ -62,7 +67,10 @@ router.patch("/logOut/:id", validation(logOutSchema), isAuthorized(LOG_OUT), log
 
 router.patch("/userExpireDocment", validation(userExpireDocmentSchema), isAuthorized(USER_EXPIRE_DOCMENT), userExpireDocment);
 
-router.get("/getAllUsers", validation(getAllUsersSchema), isAuthorized(GET_ALL_USERS), getAllUsers)
+router.get("/getAllUsers", validation(getAllUsersSchema), isAuthorized(GET_ALL_USERS), getAllUsers);
+
+router.get("/displayProfilePic/:filename", validation(displayProfilePicSchema), displayProfilePic);
+
 
 
 

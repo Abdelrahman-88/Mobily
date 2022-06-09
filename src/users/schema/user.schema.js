@@ -5,6 +5,7 @@ const userSchema = new Schema({
     companyName: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
+    profilePic: { type: Object },
     mapLocation: { type: String, required: true },
     documentId: { type: Schema.Types.String, ref: "document" },
     documentExpiryDate: Date,

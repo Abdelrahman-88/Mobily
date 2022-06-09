@@ -23,23 +23,28 @@ const register = async(req, res) => {
                     const sales = await Admin.findOne({ employeeId: salesId, role: "sales" })
                     if (sales) {
                         newUser = new User({ email, companyName, password, verificationKey, salesId, city, mapLocation });
+                        contain();
                     } else {
                         res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid sales id" });
                     }
                 } else {
                     newUser = new User({ email, companyName, password, verificationKey, city, mapLocation });
+                    contain();
                 }
-                const user = await newUser.save();
-                try {
-                    const info = await sendEmail([email], verificationTemplate(verificationKey), subject)
-                    if (info.messageId) {
-                        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY)
-                        res.status(StatusCodes.CREATED).json({ message: "Registered successfully", token });
-                    } else {
+
+                async function contain() {
+                    const user = await newUser.save();
+                    try {
+                        const info = await sendEmail([email], verificationTemplate(verificationKey), subject)
+                        if (info.messageId) {
+                            const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY)
+                            res.status(StatusCodes.CREATED).json({ message: "Registered successfully", token });
+                        } else {
+                            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
+                        }
+                    } catch (error) {
                         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
                     }
-                } catch (error) {
-                    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Send verification email error" });
                 }
             } else {
                 res.status(StatusCodes.BAD_REQUEST).json({ message: "Password doesnot match cPassword" });
