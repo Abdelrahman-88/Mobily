@@ -21,7 +21,7 @@ const updateProfile = async(req, res) => {
                     if (req.file) {
                         let profilePic = {
                             name: req.file.filename,
-                            url: process.env.URL + 'displayForms/' + req.file.filename
+                            url: process.env.URL + 'displayProfilePic/' + req.file.filename
                         }
                         data = await User.findByIdAndUpdate({ _id: id }, { companyName, city, mapLocation, profilePic }, { new: true });
                     } else {
