@@ -10,7 +10,9 @@ const priceOfferSchema = new Schema({
         total: { type: Number },
         _id: false
     }],
-    totalPrice: { type: Number }
+    totalPrice: { type: Number },
+    pricePdf: { type: Object },
+    userPdf: { type: Object }
 
 }, { timestamps: true })
 

@@ -10,5 +10,10 @@ module.exports = {
             serviceId: Joi.string().required().min(24).max(24),
             quantity: Joi.number().required().greater(0)
         })
+    },
+    displayPdfSchema: {
+        params: Joi.object().required().keys({
+            filename: Joi.string().required()
+        })
     }
 }

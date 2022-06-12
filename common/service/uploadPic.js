@@ -28,7 +28,7 @@ function fileFilter(req, file, cb) {
     if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
         cb(null, true)
     } else {
-        req.fileValidationError = "Forbidden extension only PDF available";
+        req.fileValidationError = "Forbidden extension only png/jpg/jpeg available";
         return cb(null, false, req.fileValidationError);
     }
 }

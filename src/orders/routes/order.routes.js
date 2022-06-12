@@ -1,5 +1,6 @@
 const isAuthorized = require("../../../common/middelWare/isAuthorized");
 const validation = require("../../../common/middelWare/validation");
+const upload = require("../../../common/service/uploadFile");
 const {
     getOrderById,
     getAllOrders,
@@ -10,6 +11,7 @@ const {
     addOrder,
     updateSeenOrders
 } = require("../controler/order.controler");
+const { updateOrder } = require("../controler/updateOrder");
 const {
     validateOrder,
     removeOrderAction
@@ -22,7 +24,8 @@ const {
     GET_USER_ORDERS,
     GET_SEEN_ORDERS,
     UPDATE_SEEN_ORDERS,
-    REMOVE_ORDER_ACTION
+    REMOVE_ORDER_ACTION,
+    UPDATE_ORDER
 } = require("../endPoints");
 const {
     addOrderSchema,
@@ -32,7 +35,8 @@ const {
     getUserOrdersSchema,
     getSeenOrdersSchema,
     updateSeenOrdersSchema,
-    removeOrderActionSchema
+    removeOrderActionSchema,
+    updateOrderSchema
 } = require("../validation/order.validation");
 const router = require("express").Router();
 
@@ -43,7 +47,7 @@ router.get("/getOrderById/:orderId", validation(getOrderByIdSchema), isAuthorize
 
 router.get("/getAllOrders", validation(getAllOrdersSchema), isAuthorized(GET_ALL_ORDERS), getAllOrders)
 
-router.put("/validateOrder/:orderId", validation(validateOrderSchema), isAuthorized(VALIDATE_ORDER), validateOrder)
+router.put("/validateOrder/:orderId", upload.single('form'), validation(validateOrderSchema), isAuthorized(VALIDATE_ORDER), validateOrder)
 
 router.get("/getUserOrders/:createdBy", validation(getUserOrdersSchema), isAuthorized(GET_USER_ORDERS), getUserOrders)
 
@@ -52,5 +56,7 @@ router.get("/getSeenOrders/:createdBy", validation(getSeenOrdersSchema), isAutho
 router.patch("/updateSeenOrders/:createdBy", validation(updateSeenOrdersSchema), isAuthorized(UPDATE_SEEN_ORDERS), updateSeenOrders)
 
 router.patch("/removeOrderAction/:orderId", validation(removeOrderActionSchema), isAuthorized(REMOVE_ORDER_ACTION), removeOrderAction)
+
+router.patch("/updateOrder/:orderId", upload.single('form'), validation(updateOrderSchema), isAuthorized(UPDATE_ORDER), updateOrder)
 
 module.exports = router;
