@@ -75,6 +75,10 @@ module.exports = {
     updateOrderSchema: {
         params: Joi.object().required().keys({
             orderId: Joi.string().required().min(24).max(24)
+        }),
+        body: Joi.object().required().keys({
+            accept: Joi.boolean().required(),
+            comment: Joi.string().allow(''),
         })
     }
 }
