@@ -18,8 +18,7 @@ const updateOrder = async(req, res) => {
                 } else {
                     comments = [...price.comments]
                 }
-
-                if (accept == true) {
+                if (accept == "true") {
                     if (req.fileValidationError) {
                         res.status(StatusCodes.BAD_REQUEST).json({ message: req.fileValidationError });
                     } else {

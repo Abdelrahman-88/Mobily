@@ -7,7 +7,7 @@ const userSchema = new Schema({
     email: { type: String, required: true },
     profilePic: { type: Object },
     mapLocation: { type: String, required: true },
-    documentId: { type: Schema.Types.String, ref: "document" },
+    documentId: { type: Schema.Types.ObjectId, ref: "document" },
     documentExpiryDate: Date,
     documentValidity: { type: Boolean, default: false },
     salesId: { type: Number },

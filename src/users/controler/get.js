@@ -24,6 +24,7 @@ const getAllUsers = async(req, res) => {
             res.status(StatusCodes.BAD_REQUEST).json({ message: "No users found" });
         }
     } catch (error) {
+        console.log(error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Faild to get all users" });
     }
 }
