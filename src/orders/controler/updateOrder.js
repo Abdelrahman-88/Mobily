@@ -27,7 +27,7 @@ const updateOrder = async(req, res) => {
                                 name: req.file.filename,
                                 url: process.env.URL + 'displayPdf/' + req.file.filename
                             }
-                            const priceOffer = await PriceOffer.findOneAndUpdate({ _id: validOrder.requestId }, { userPdf, comments })
+                            const priceOffer = await PriceOffer.findOneAndUpdate({ _id: validOrder.requestId }, { userPdf, comments, accept })
                             const order = await Order.findOneAndUpdate({ _id: orderId }, { status: "open" })
                             res.status(StatusCodes.OK).json({ message: "Order updated successfully" });
                         } else {
