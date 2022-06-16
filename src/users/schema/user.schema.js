@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
     companyName: { type: String, required: true },
+    name: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
     profilePic: { type: Object },

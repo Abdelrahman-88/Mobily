@@ -9,7 +9,7 @@ const Admin = require("../../admins/model/admin.model");
 
 const register = async(req, res) => {
     try {
-        let { email, companyName, password, cPassword, salesId, city, mapLocation } = req.body
+        let { name, email, companyName, password, cPassword, salesId, city, mapLocation } = req.body
         email = email.toLowerCase()
         const subject = `Email confirmation`
         const emailExist = await User.findOne({ email, deactivated: false });
@@ -22,13 +22,13 @@ const register = async(req, res) => {
                 if (salesId) {
                     const sales = await Admin.findOne({ employeeId: salesId, role: "sales" })
                     if (sales) {
-                        newUser = new User({ email, companyName, password, verificationKey, salesId, city, mapLocation });
+                        newUser = new User({ name, email, companyName, password, verificationKey, salesId, city, mapLocation });
                         contain();
                     } else {
                         res.status(StatusCodes.BAD_REQUEST).json({ message: "Invalid sales id" });
                     }
                 } else {
-                    newUser = new User({ email, companyName, password, verificationKey, city, mapLocation });
+                    newUser = new User({ name, email, companyName, password, verificationKey, city, mapLocation });
                     contain();
                 }
 

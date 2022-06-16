@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 
 const updateProfile = async(req, res) => {
     try {
-        let { email, companyName, city, mapLocation } = req.body;
+        let { name, email, companyName, city, mapLocation } = req.body;
         email = email.toLowerCase()
         const { id } = req.params;
         if (req.fileValidationError) {
@@ -23,9 +23,9 @@ const updateProfile = async(req, res) => {
                             name: req.file.filename,
                             url: process.env.URL + 'displayProfilePic/' + req.file.filename
                         }
-                        data = await User.findByIdAndUpdate({ _id: id }, { companyName, city, mapLocation, profilePic }, { new: true });
+                        data = await User.findByIdAndUpdate({ _id: id }, { name, companyName, city, mapLocation, profilePic }, { new: true });
                     } else {
-                        data = await User.findByIdAndUpdate({ _id: id }, { companyName, city, mapLocation }, { new: true });
+                        data = await User.findByIdAndUpdate({ _id: id }, { name, companyName, city, mapLocation }, { new: true });
                     }
                     const { password, verificationKey, verified, deactivated, blocked, forgetPassword, ...rest } = data._doc
                     const token = jwt.sign({...rest }, process.env.SECRET_KEY)
@@ -43,9 +43,9 @@ const updateProfile = async(req, res) => {
                                 name: req.file.filename,
                                 url: process.env.URL + 'displayProfilePic/' + req.file.filename
                             }
-                            data = await User.findByIdAndUpdate({ _id: id }, { email, companyName, city, mapLocation, verified: false, logedIn: false, verificationKey, profilePic }, { new: true });
+                            data = await User.findByIdAndUpdate({ _id: id }, { name, email, companyName, city, mapLocation, verified: false, logedIn: false, verificationKey, profilePic }, { new: true });
                         } else {
-                            data = await User.findByIdAndUpdate({ _id: id }, { email, companyName, city, mapLocation, verified: false, logedIn: false, verificationKey }, { new: true });
+                            data = await User.findByIdAndUpdate({ _id: id }, { name, email, companyName, city, mapLocation, verified: false, logedIn: false, verificationKey }, { new: true });
                         }
                         const info = await sendEmail([email], updateTemplate(verificationKey), subject)
                         if (info.messageId) {
