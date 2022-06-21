@@ -4,7 +4,7 @@ const { Schema } = require("mongoose")
 const followUpSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "user" },
     requestId: { type: Schema.Types.ObjectId },
-    actionBy: { type: Schema.Types.String, ref: "admin" },
+    actionBy: { type: Schema.Types.ObjectId, ref: "admin" },
     action: { type: Boolean, default: false },
     status: {
         type: String,
