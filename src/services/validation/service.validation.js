@@ -12,7 +12,7 @@ module.exports = {
             status: Joi.string().valid("valid", "expired", "pending").required(),
             category: Joi.string().valid("bPostpaid", "dPostpaid", "dPrepaid", "bulkSmsB", "businessAdd",
                 "roamingAdd", "fiberNet", "iServices", "advVoiceServices", "localConnect", "advancedConnect",
-                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions").required(),
+                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions", "fVoic").required(),
             internet: Joi.string().allow(''),
             localM: Joi.string().allow(''),
             groupM: Joi.string().allow(''),
@@ -28,7 +28,7 @@ module.exports = {
             search: Joi.string().allow(''),
             category: Joi.string().valid("bPostpaid", "dPostpaid", "dPrepaid", "bulkSmsB", "businessAdd",
                 "roamingAdd", "fiberNet", "iServices", "advVoiceServices", "localConnect", "advancedConnect",
-                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions").allow('')
+                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions", "fVoic").allow('')
         })
     },
     getAllServicesAdminSchems: {
@@ -38,7 +38,7 @@ module.exports = {
             search: Joi.string().allow(''),
             category: Joi.string().valid("bPostpaid", "dPostpaid", "dPrepaid", "bulkSmsB", "businessAdd",
                 "roamingAdd", "fiberNet", "iServices", "advVoiceServices", "localConnect", "advancedConnect",
-                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions").allow(''),
+                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions", "fVoic").allow(''),
             status: Joi.string().valid("valid", "expired", "pending").allow('')
         })
     },
@@ -53,7 +53,7 @@ module.exports = {
             status: Joi.string().valid("valid", "expired", "pending").required(),
             category: Joi.string().valid("bPostpaid", "dPostpaid", "dPrepaid", "bulkSmsB", "businessAdd",
                 "roamingAdd", "fiberNet", "iServices", "advVoiceServices", "localConnect", "advancedConnect",
-                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions").required(),
+                "smartEdge", "iotSolutions", "hosting", "networkSecurity", "businessContSolutions", "fVoic").required(),
             internet: Joi.string().allow(''),
             localM: Joi.string().allow(''),
             groupM: Joi.string().allow(''),
